@@ -4,3 +4,6 @@
 .settings
 .settings/*
 *.*~
+.project
+.cproject
+.cdtproject
