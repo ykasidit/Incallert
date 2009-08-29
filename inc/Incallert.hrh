@@ -1,0 +1,57 @@
+/* ====================================================================
+ * File: Incallert.hrh
+ * Created: 09/19/05
+ * Author: Kasidit Yusuf
+ * Copyright (c): Clearevo, All rights reserved
+ * ==================================================================== */
+
+#ifndef __Incallert_HRH__
+#define __Incallert_HRH__
+
+/** Incallert enumerate command codes */
+enum TIncallertIds
+    {
+     EIncallertCommand1 = 0x6000  // start value must not be 0
+    ,EIncallertSelectCommand
+    ,EIncallertSettingsCommand
+    ,EIncallertHelpCommand
+    ,EIncallertAboutCommand  
+    ,EIncallertSetToDefaultsCommand
+    ,EIncallertHelpSettingsCommand
+    ,EIncallertNoteOnAlertsCommand
+    };
+
+enum TIncallertViews
+	{
+		ENavigationPaneStatusViewId=1
+		,ENavigationPaneSettingsViewId
+		,ENavigationPaneHelpViewId
+		,ENavigationPaneAboutViewId
+	};
+	
+	
+enum TSettingPageEnum
+	{
+		ESettingListAutoStartItem
+		,ESettingListCycleTimeItem
+		,ESettingListStartMinuteItem
+		,ESettingListPreCycleTimeItem	
+	};
+	
+	
+	enum TSettingsListSettingItems
+	{
+	ESettingsListDifficultySettingItem,
+	ESettingsListPlayerNameSettingItem,
+	ESettingsListHintsSettingItem
+	};
+	
+	enum TDialogEnums
+	{
+	EInfoDlgLabelTextId,	
+	EInfoDlgLabelHeadingId
+	};
+#define KMaxPlayerNameLength 9
+	
+	
+#endif // __Incallert_HRH__

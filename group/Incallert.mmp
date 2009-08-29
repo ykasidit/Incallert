@@ -1,0 +1,130 @@
+/*
+    Copyright (C) 2009 Kasidit Yusuf.
+
+    This file is part of Incallert.
+
+    Incallert is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Incallert is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Incallert.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#ifdef EKA2
+TARGET			Incallert.exe
+TARGETTYPE		exe
+UID		  		0x100039CE 0xA000C40E
+#else
+TARGET          Incallert.app
+TARGETTYPE      app
+targetpath      \system\apps\Incallert
+UID             0x100039ce 0x2001A3E4
+#endif
+
+
+
+
+SOURCEPATH		..\src
+
+SYSTEMINCLUDE	\epoc32\include
+USERINCLUDE	   ..\inc
+
+
+SOURCE			AboutAppView.cpp
+SOURCE			AboutTextContainer.cpp
+SOURCE			HelpAppView.cpp
+SOURCE			HelpTextContainer.cpp
+SOURCE			Incallert.cpp
+SOURCE			IncallertApplication.cpp
+SOURCE			IncallertAppUi.cpp
+SOURCE			IncallertAppView.cpp
+SOURCE			IncallertContainer.cpp
+SOURCE			IncallertDocument.cpp
+SOURCE			IncallertSettingsContainer.cpp
+SOURCE			IncallertSettingsView.cpp
+SOURCE			MyRichTextEditor.cpp
+SOURCE			ScrollRichTextContainer.cpp
+SOURCE			SettingsListSettingItemList.cpp
+SOURCE			SettingsListSettings.cpp
+SOURCE			LineStatusHandler.cpp
+
+
+#ifdef EKA2
+#else
+STATICLIBRARY edll.lib
+#endif
+
+LIBRARY		   euser.lib
+LIBRARY		   apparc.lib
+LIBRARY		   cone.lib
+LIBRARY		   eikcore.lib
+LIBRARY		   avkon.lib
+LIBRARY		   commonengine.lib
+LIBRARY		   efsrv.lib
+LIBRARY		   estor.lib
+LIBRARY        aknnotify.lib bitgdi.lib
+LIBRARY        hlplch.lib bafl.lib fbscli.lib etel3rdparty.lib bluetooth.lib mgfetch.lib gdi.lib esock.lib connmon.lib btextnotifiers.lib egul.lib http.lib inetprotutil.lib aknskins.lib eikcoctl.lib eikctl.lib imageconversion.lib commdb.lib sendui.lib etext.lib apgrfx.lib sysutil.lib apmime.lib insock.lib ws32.lib commonui.lib etelmm.lib ezlib.lib etel.lib msgs.lib gsmu.lib smcm.lib
+
+#ifdef EKA2
+LIBRARY   aknicon.lib
+#endif
+
+START BITMAP iclmain.mbm
+HEADER
+SOURCEPATH ..\
+source c16,1 main.bmp main_mask.bmp
+END
+
+EPOCSTACKSIZE 0x8000
+
+#ifdef EKA2
+SOURCEPATH		..\data
+
+START RESOURCE Incallert.rss
+	HEADER
+	TARGET Incallert
+	TARGETPATH resource\apps
+	LANG 01
+END
+
+START RESOURCE	Incallert_reg.rss
+TARGET Incallert_reg
+TARGETPATH 	  \private\10003a3f\apps
+END //RESOURCE
+
+#else
+RESOURCE        ..\data\Incallert.rss
+RESOURCE        ..\data\Incallert_caption.rss
+#endif
+
+#ifdef EKA2
+LANG EN
+
+VENDORID	  	  0
+SECUREID		  0x2001BA2E
+CAPABILITY	  	  LocalServices NetworkServices ReadUserData UserEnvironment WriteUserData
+
+#ifdef ENABLE_ABIV2_MODE
+DEBUGGABLE
+#endif
+// End of File
+
+START RESOURCE [2001BA2E].rss
+	TARGET [2001BA2E].RSC
+	TARGETPATH \resource
+END
+
+#endif
+
+#ifndef EKA2
+//aif for s60 2nd ed
+AIF Incallert.aif ..\aif Incallertaif.rss c12 context_pane_icon.bmp context_pane_icon_mask.bmp list_icon.bmp list_icon_mask.bmp
+#endif
+
