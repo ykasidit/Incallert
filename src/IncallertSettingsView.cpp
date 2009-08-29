@@ -155,7 +155,7 @@ void CIncallertSettingsView::DoActivateL(const TVwsViewId& /*aPrevViewId*/,
     _LIT(KIni,"Incallert.ini");
     TFileName fname(KIni);
 	#ifndef __WINS__
-		CompleteWithAppPath(fname);
+		CIncallertAppUi::CompleteWithPrivatePathL(fname);
 	#endif
 
     RFs fs = iCoeEnv->FsSession();
@@ -203,7 +203,7 @@ TBool CIncallertSettingsView::AutoStartFilePresent()
    	    TFileName mdlFile(path);
 
 		#ifndef __WINS__
-	    CompleteWithAppPath(mdlFile);
+   	 CIncallertAppUi::CompleteWithPrivatePathL(mdlFile);
 	    #endif
 
 		return ConeUtils::FileExists(mdlFile);
@@ -219,7 +219,7 @@ void CIncallertSettingsView::SaveSettingsL()
     			_LIT(KIni,"Incallert.ini");
     TFileName fname(KIni);
 	#ifndef __WINS__
-		CompleteWithAppPath(fname);
+    CIncallertAppUi::CompleteWithPrivatePathL(fname);
 	#endif
 
 

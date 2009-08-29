@@ -17,27 +17,27 @@
     along with Incallert.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "IncallertApplication.h"
-#ifdef EKA2
-#include <eikstart.h>
-#endif
+#include "Incallert.hrh"
+#include <appinfo.rh>
+#include <Incallert.rsg>
+#include <uikon.rh>
 
+UID2 KUidAppRegistrationResourceFile
+UID3 0xA000C40E
 
-EXPORT_C CApaApplication* NewApplication()
+RESOURCE APP_REGISTRATION_INFO
 	{
-	return new CIncallertApplication;
+	app_file="Incallert";
+	localisable_resource_file =  "\\resource\\apps\\Incallert";
+	localisable_resource_id = R_LOCALISABLE_APP_INFO;
+
+	embeddability=KAppNotEmbeddable;
+	newfile=KAppDoesNotSupportNewFile;
+
+	opaque_data = r_startup_detect;
 	}
 
-
-#ifdef EKA2
-GLDEF_C TInt E32Main()
+RESOURCE NUMBER_INT8 r_startup_detect
 {
-return EikStart::RunApplication( NewApplication );
+ 	value = 1;
 }
-# else
-GLDEF_C TInt E32Dll( TDllReason )
-    {
-    return KErrNone;
-    }
-#endif
-

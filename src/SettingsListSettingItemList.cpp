@@ -1,4 +1,4 @@
-/*  
+/*
     Copyright (C) 2009 Kasidit Yusuf.
 
     This file is part of Incallert.
@@ -20,20 +20,22 @@
 // INCLUDE FILES
 
 // Class include
-#include "SettingsListSettingItemList.h"
 #include <aknview.h>
-#include "IncallertSettingsView.h"
-// User include
-#include "SettingsListSettings.h"
-#include <eikfutil.h> 
+#include <eikfutil.h>
 #include <aknnotewrappers.h>
+
+// User include
+#include "SettingsListSettingItemList.h"
+#include "SettingsListSettings.h"
+#include "IncallertSettingsView.h"
+#include "IncallertAppui.h"
 
 // ================= MEMBER FUNCTIONS =======================
 
 /**
 * Constructor.	Takes a copy of the reference to aDifficultyLevel
 * @param aDifficultyLevel the level of difficulty which will be set
-*/	
+*/
 CSettingsListSettingItemList::CSettingsListSettingItemList (TSettingsListSettings& aSettings)
 : iSettings (aSettings)
 	{
@@ -41,14 +43,14 @@ CSettingsListSettingItemList::CSettingsListSettingItemList (TSettingsListSetting
 
 
 /**
-*	
+*
 * Called by framework when the view size is changed.  Resizes the
 * setting list accordingly.
 *
 */
 void CSettingsListSettingItemList::SizeChanged()
 	{
-	/*if (ListBox()) 
+	/*if (ListBox())
 		{
 		ListBox()->SetRect(Rect());
 		}*/
@@ -56,13 +58,13 @@ void CSettingsListSettingItemList::SizeChanged()
 
 TKeyResponse CSettingsListSettingItemList::OfferKeyEventL(const TKeyEvent& aKeyEvent,TEventCode aType)
 	{
-		
-		
-		
+
+
+
     if (aType == EEventKey)
 		{
 
-		    if (aKeyEvent.iCode == EKeyLeftArrow  || aKeyEvent.iCode == EKeyRightArrow )		        
+		    if (aKeyEvent.iCode == EKeyLeftArrow  || aKeyEvent.iCode == EKeyRightArrow )
             {
 					return EKeyWasNotConsumed;
 			}
@@ -81,7 +83,7 @@ TKeyResponse CSettingsListSettingItemList::OfferKeyEventL(const TKeyEvent& aKeyE
 
 
 /**
-*	
+*
 * Creates the actual setting items for the list, passing
 * ownership of them to the calling class.  Each setting
 * item has a piece of member data which it sets values in.
@@ -89,10 +91,10 @@ TKeyResponse CSettingsListSettingItemList::OfferKeyEventL(const TKeyEvent& aKeyE
 CAknSettingItem* CSettingsListSettingItemList::CreateSettingItemL(TInt aIdentifier)
 	{
 	CAknSettingItem* settingItem = NULL;
-	
-	switch (aIdentifier) 
+
+	switch (aIdentifier)
 		{
-		
+
 		case ESettingListAutoStartItem:
 			{
 			autoLoad = CIncallertSettingsView::AutoStartFilePresent();
@@ -100,7 +102,7 @@ CAknSettingItem* CSettingsListSettingItemList::CreateSettingItemL(TInt aIdentifi
 			settingItem = new (ELeave) CAknBinaryPopupSettingItem(aIdentifier,autoLoad );
 			}
 			break;
-		
+
 		case ESettingListCycleTimeItem:
 
 			switch(iSettings.iCycleTime) //avoid panic that val is not valid for settingpage
@@ -111,9 +113,9 @@ CAknSettingItem* CSettingsListSettingItemList::CreateSettingItemL(TInt aIdentifi
 				case 5: break;
 				case 10: break;
 				case 15: break;
-				case 30: break;				
-				default: iSettings.iCycleTime =1;  
-			}		
+				case 30: break;
+				default: iSettings.iCycleTime =1;
+			}
 			settingItem = new (ELeave) CAknEnumeratedTextPopupSettingItem(aIdentifier, iSettings.iCycleTime);
 			break;
 		case ESettingListStartMinuteItem:
@@ -125,9 +127,9 @@ CAknSettingItem* CSettingsListSettingItemList::CreateSettingItemL(TInt aIdentifi
 				case 4: break;
 				case 5: break;
 				case 10: break;
-				case 15: break;				
-				case 30: break;				
-				default: iSettings.iStartMinute =1;  
+				case 15: break;
+				case 30: break;
+				default: iSettings.iStartMinute =1;
 			}
 			settingItem = new (ELeave) CAknEnumeratedTextPopupSettingItem(aIdentifier, iSettings.iStartMinute);
 			break;
@@ -144,7 +146,7 @@ CAknSettingItem* CSettingsListSettingItemList::CreateSettingItemL(TInt aIdentifi
 			}
 			settingItem = new (ELeave) CAknEnumeratedTextPopupSettingItem(aIdentifier, iSettings.iPreCycleTime);
 			break;
-		
+
 		/*case ESettingsListPlayerNameSettingItem:
 			settingItem = new (ELeave) CAknTextSettingItem(aIdentifier, iSettings.PlayerName());
 			break;
@@ -163,14 +165,14 @@ CAknSettingItem* CSettingsListSettingItemList::CreateSettingItemL(TInt aIdentifi
 void CSettingsListSettingItemList::ChangeSelectedItemL()
 	{
 
-	
+
 		EditItemL(ListBox()->CurrentItemIndex(), ETrue);
-	
-	
+
+
 	}
 
 /**
-* Called by the framework whenever an item is selected. 
+* Called by the framework whenever an item is selected.
 * Causes the edit page for the currently selected setting item to be displayed and stores
 * any changes made.
 */
@@ -178,30 +180,30 @@ void CSettingsListSettingItemList::EditItemL (TInt aIndex, TBool aCalledFromMenu
 	{
 		if(aIndex!=0)
 		{
-		CAknSettingItemList::EditItemL(aIndex, aCalledFromMenu);	
-		(*SettingItemArray())[aIndex]->StoreL();		
+		CAknSettingItemList::EditItemL(aIndex, aCalledFromMenu);
+		(*SettingItemArray())[aIndex]->StoreL();
 		return;
 		}
-		
-		
 
-	
+
+
+
 	autoLoad = CIncallertSettingsView::AutoStartFilePresent();
-	
 
-	
-	#ifdef __WINS__
-  		_LIT(path,"D:\\Symbian\\Series60_1_2_CW\\epoc32\\release\\WINSCW\\UDEB\\Z\\SYSTEM\\RECOGS\\Iclrstrt.mdl");
-  		#else
-	    _LIT(path,"\\system\\Recogs\\Iclrstrt.mdl");
-	    #endif
-	    
+
+#ifndef EKA2
+	//mdl is for s60 2nd only
+
+	#ifndef __WINS__
+  	_LIT(path,"\\system\\Recogs\\Iclrstrt.mdl");
+	#endif
+
    	    TFileName mdlFile(path);
-		
+
 		#ifndef __WINS__
-	    CompleteWithAppPath(mdlFile);
+   	 CIncallertAppUi::CompleteWithPrivatePathL(mdlFile);
 	    #endif
-		
+
 		if(	autoLoad)
 		{
 			TInt res = EikFileUtils::DeleteFile(mdlFile);
@@ -210,23 +212,23 @@ void CSettingsListSettingItemList::EditItemL (TInt aIndex, TBool aCalledFromMenu
 				_LIT(msg,"Auto-Start Disabled.");
 			    CAknConfirmationNote* informationNote = new (ELeave) CAknConfirmationNote(ETrue);
 			    informationNote->SetTimeout(CAknNoteDialog::EShortTimeout);
-			    CAknSettingItemList::EditItemL(aIndex, aCalledFromMenu);	
+			    CAknSettingItemList::EditItemL(aIndex, aCalledFromMenu);
 				(*SettingItemArray())[aIndex]->StoreL();
-			   	informationNote->ExecuteLD(msg);				
+			   	informationNote->ExecuteLD(msg);
 			}
 			else
 			{
 				_LIT(msg,"Failed to disable Auto-Start.");
 			    CAknErrorNote* informationNote = new (ELeave) CAknErrorNote(ETrue);
 			    informationNote->SetTimeout(CAknNoteDialog::EShortTimeout);
-			   	informationNote->ExecuteLD(msg);				
+			   	informationNote->ExecuteLD(msg);
 			}
-			
+
 		}
 		else
 		{
 
-	    
+
 
 
 	    #ifdef __WINS__
@@ -234,39 +236,40 @@ void CSettingsListSettingItemList::EditItemL (TInt aIndex, TBool aCalledFromMenu
   		#else
 	    _LIT(srcpath,"Iclrstrt.mdl");
 	    #endif
-	    
+
 	    TFileName mdlFileSrc(srcpath);
 
 		#ifndef __WINS__
-	    CompleteWithAppPath(mdlFileSrc);
-	    #endif		
-			
+	    CIncallertAppUi::CompleteWithPrivatePathL(mdlFileSrc);
+	    #endif
+
 			TInt res = EikFileUtils::CopyFile(mdlFileSrc,mdlFile,CFileMan::ERecurse);
 			if(res == KErrNone)
 			{
 				_LIT(msg,"Auto-Start Enabled.");
 			    CAknConfirmationNote* informationNote = new (ELeave) CAknConfirmationNote(ETrue);
 			    informationNote->SetTimeout(CAknNoteDialog::EShortTimeout);
-			    CAknSettingItemList::EditItemL(aIndex, aCalledFromMenu);	
+			    CAknSettingItemList::EditItemL(aIndex, aCalledFromMenu);
 				(*SettingItemArray())[aIndex]->StoreL();
-			   	informationNote->ExecuteLD(msg);				
+			   	informationNote->ExecuteLD(msg);
 			}
 			else
 			{
 				_LIT(msg,"Failed to enable Auto-Start.");
 			    CAknErrorNote* informationNote = new (ELeave) CAknErrorNote(ETrue);
 			    informationNote->SetTimeout(CAknNoteDialog::EShortTimeout);
-			   	informationNote->ExecuteLD(msg);				
+			   	informationNote->ExecuteLD(msg);
 			}
 		}
-		
-	
-	
-		
+
+#endif
+
+
+
 	}
-	
+
 CSettingsListSettingItemList::~CSettingsListSettingItemList()
-	{		
-		
+	{
+
 	}
-	
+

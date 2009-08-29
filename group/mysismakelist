@@ -9,8 +9,8 @@
 
 #####sdk selector
 #comment out the s60 ed which you are not using
-s60ed="2nd"
-#s60ed="3rd"
+#s60ed="2nd"
+s60ed="3rd"
 #################
 
 if [ "$s60ed" = "3rd" ]; then
@@ -30,16 +30,16 @@ else
 fi 				
 
 ###s60 3rd ed config
-unsignedsisname="PhoneMon.sis"
-signedsisname="PhoneMon.sisx"
-pkgfile3rdEd="PhoneMon.pkg"
-cerfile="../../AzqTestsApp/sis/ffxazq.cer"
-keyfile="../../AzqTestsApp/sis/ffx.key"
+unsignedsisname="Incallert.sis"
+signedsisname="Incallert.sisx"
+pkgfile3rdEd="IncallertS603rd.pkg"
+cerfile="../sis/mycer.cer"
+keyfile="../sis/mykey.key"
 signingpassword="0000"
 ###
 
 ###s60 2nd ed config
-pkgfile2ndEd="PhoneMonS60v2.pkg" #skip this if you're not building for 2nd ed also
+pkgfile2ndEd="IncallertS602nd.pkg" #skip this if you're not building for 2nd ed also
 ###
 
 ############## END: Build Config

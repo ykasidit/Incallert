@@ -21,7 +21,7 @@
 
 RESOURCE AIF_DATA
 {
-	app_uid = 0x2001163B;
+	app_uid = 0x2001A3E4;
 	num_icons = 2;
 	embeddability = KAppNotEmbeddable;
 	newfile = KAppDoesNotSupportNewFile;

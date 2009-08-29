@@ -19,7 +19,7 @@
 
 #include <e32base.h>
 #include <e32std.h>
-#include <saclient.h>
+//#include <saclient.h>
 #include <aknappui.h>
 #include <aknglobalnote.h>
 #include <etel.h>

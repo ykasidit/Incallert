@@ -36,12 +36,19 @@
 #include "SettingsListSettings.h"
 
 #include "AboutAppView.h"
-#include <plpvariant.h>
+//#include <plpvariant.h>
 #include <s32file.h>
 
 void CIncallertAppUi::ConstructL()
     {
-    BaseConstructL(0x08 | 0x1000);
+
+#ifdef EKA2
+  BaseConstructL(EAknEnableSkin);
+#else
+  //BaseConstructL(KEnableSkinFlag | KLayoutAwareFlag);
+  BaseConstructL(0x08 | 0x1000);
+#endif
+
 
     iAppView = CIncallertAppView::NewL(this);
     iSettingsView = CIncallertSettingsView::NewL(this);

@@ -1,4 +1,4 @@
-/*  
+/*
     Copyright (C) 2009 Kasidit Yusuf.
 
     This file is part of Incallert.
@@ -28,10 +28,13 @@ NAME ICLT
 
 #include "Incallert.hrh"
 
+#ifdef EKA2
+#include <appinfo.rh>
+#endif
 
 // ---------------------------------------------------------
-//   
-//    Define the resource file signature 
+//
+//    Define the resource file signature
 //    This resource should be empty.
 //
 // ---------------------------------------------------------
@@ -39,7 +42,7 @@ NAME ICLT
 RESOURCE RSS_SIGNATURE { }
 
 // ---------------------------------------------------------
-//   
+//
 //    Default Document Name
 //
 // ---------------------------------------------------------
@@ -47,7 +50,7 @@ RESOURCE RSS_SIGNATURE { }
 RESOURCE TBUF r_default_document_name { buf=""; }
 
 // ---------------------------------------------------------
-//   
+//
 //    Define default menu and CBA key.
 //
 // ---------------------------------------------------------
@@ -56,6 +59,23 @@ RESOURCE EIK_APP_INFO
     {
     status_pane = r_navigationpane_status_pane;
     }
+
+
+#ifdef EKA2
+
+RESOURCE LOCALISABLE_APP_INFO r_localisable_app_info
+	{
+	short_caption = "Incallert";
+	caption_and_icon =
+	CAPTION_AND_ICON_INFO
+		{
+		caption = qtn_caption_string;
+
+		number_of_icons = 1;
+		icon_file = "\\resource\\apps\\Incallert.mif";
+		};
+	}
+#endif
 
 RESOURCE AVKON_VIEW r_status_view
     {
@@ -66,7 +86,7 @@ RESOURCE AVKON_VIEW r_status_view
 RESOURCE AVKON_VIEW r_settings_view
     {
     menubar = r_settings_menubar;
-	cba = R_AVKON_SOFTKEYS_OPTIONS_BACK; 
+	cba = R_AVKON_SOFTKEYS_OPTIONS_BACK;
 
     }
 
@@ -84,9 +104,9 @@ RESOURCE AVKON_VIEW r_about_view
 
 RESOURCE RTXTED R_MYRICHTEXTEDITOR_EDITOR
 	{
-	
 
-	textlimit=512; 
+
+	textlimit=512;
 
 
 	flags= EEikEdwinInclusiveSizeFixed|
@@ -97,7 +117,7 @@ EEikEdwinLineCursor|
 EEikEdwinNoHorizScrolling|EEikEdwinAvkonDisableCursor;
 	fontnameflags = EGulAllFonts;
 	avkon_flags= EAknEditorFlagEnableScrollBars;
-	
+
 	}
 
 
@@ -140,7 +160,7 @@ RESOURCE NAVI_DECORATOR r_navigationpane_navi_tabgroup
 						id = ENavigationPaneAboutViewId;
 						txt = "About";
 					}
-		
+
 			   };
 	};
 
@@ -148,7 +168,7 @@ RESOURCE NAVI_DECORATOR r_navigationpane_navi_tabgroup
 
 
 // ---------------------------------------------------------
-//   
+//
 //   r_Incallert_menubar
 //   Menubar for Incallert example
 //
@@ -170,7 +190,7 @@ RESOURCE MENU_BAR r_settings_menubar
     }
 
 // ---------------------------------------------------------
-//   
+//
 //   r_Incallert_menu
 //   Menu for "Options"
 //
@@ -178,17 +198,17 @@ RESOURCE MENU_BAR r_settings_menubar
 //
 RESOURCE MENU_PANE r_Incallert_menu
     {
-        items = 
+        items =
         {
          MENU_ITEM {command = EIncallertSettingsCommand;  txt = "Settings";}
         ,MENU_ITEM {command = EIncallertHelpCommand;  txt = "Help";}
         ,MENU_ITEM {command = EIncallertAboutCommand;   txt = "About";}
-        ,MENU_ITEM {command = EAknSoftkeyExit;   txt = "Stop & Exit";}                
+        ,MENU_ITEM {command = EAknSoftkeyExit;   txt = "Stop & Exit";}
         };
     }
 RESOURCE MENU_PANE r_settings_menu
     {
-        items = 
+        items =
         {
          MENU_ITEM {command = EIncallertSelectCommand;  txt = "Change";}
         ,MENU_ITEM {command = EIncallertSetToDefaultsCommand;  txt = "Set to Defaults";}
@@ -215,18 +235,18 @@ RESOURCE AVKON_SETTING_ITEM_LIST r_settingslist_setting_item_list
 {
 	flags = EAknSettingPageNoOrdinalDisplayed|EAknListBoxLoopScrolling;
 	title = "Settings";
-	
+
 	//initial_number = 1;
-	items = 
+	items =
 			{
 				AVKON_SETTING_ITEM
 				{
 
 					identifier = ESettingListAutoStartItem;
-					associated_resource = r_settingslist_autostart_popup_setting_texts;								
-					setting_page_resource = r_settinglist_autostart_setting_page;				
+					associated_resource = r_settingslist_autostart_popup_setting_texts;
+					setting_page_resource = r_settinglist_autostart_setting_page;
 					name = "Auto-Start";
-					
+
 					//Enabled
 					//Disabled
 				}
@@ -235,10 +255,10 @@ RESOURCE AVKON_SETTING_ITEM_LIST r_settingslist_setting_item_list
 				{
 
 					identifier = ESettingListCycleTimeItem;
-					associated_resource = r_settingslist_cycletime_popup_setting_texts;								
-					setting_page_resource = r_settinglist_cycletime_setting_page;				
+					associated_resource = r_settingslist_cycletime_popup_setting_texts;
+					setting_page_resource = r_settinglist_cycletime_setting_page;
 					name = "Minute Alert Cycle";
-					
+
 					//Every Minute
 					//Every 2 Min
 					//Every 3 Min
@@ -246,21 +266,21 @@ RESOURCE AVKON_SETTING_ITEM_LIST r_settingslist_setting_item_list
 					//Every 10 Min
 					//Every 15 Min
 					//Every 30 Min
-					
+
 				}
 				,AVKON_SETTING_ITEM
 				{
 					identifier = ESettingListStartMinuteItem;
-					associated_resource = r_settingslist_startat_popup_setting_texts;								
+					associated_resource = r_settingslist_startat_popup_setting_texts;
 					setting_page_resource = r_settingslist_startat_setting_page;
 
 					name = "Start At";
 				}
 				,AVKON_SETTING_ITEM
 				{
-					
-					identifier = ESettingListPreCycleTimeItem;					
-					associated_resource = r_settingslist_precycletime_popup_setting_texts;								
+
+					identifier = ESettingListPreCycleTimeItem;
+					associated_resource = r_settingslist_precycletime_popup_setting_texts;
 					setting_page_resource = r_settingslist_precycletime_setting_page;
 					name = "Warn Before Cycle";
 					//None
@@ -270,10 +290,10 @@ RESOURCE AVKON_SETTING_ITEM_LIST r_settingslist_setting_item_list
 					//10 Sec. warning
 					//15 Sec. warning
 					//30 Sec. warning
-					
+
 				}
 			};
-	
+
 }
 
 RESOURCE AVKON_POPUP_SETTING_TEXTS r_settingslist_precycletime_popup_setting_texts
@@ -281,7 +301,7 @@ RESOURCE AVKON_POPUP_SETTING_TEXTS r_settingslist_precycletime_popup_setting_tex
 	setting_texts_resource = r_settingslist_precycletime_texts;
 	popped_up_texts_resource = r_settingslist_precycletime_popup_texts;
 	}
-	
+
 RESOURCE AVKON_POPUP_SETTING_TEXTS r_settingslist_startat_popup_setting_texts
 	{
 	setting_texts_resource = r_settingslist_startat_texts;
@@ -298,29 +318,29 @@ RESOURCE AVKON_POPUP_SETTING_TEXTS r_settingslist_autostart_popup_setting_texts
 	setting_texts_resource = r_settingslist_autostart_texts;
 	popped_up_texts_resource = r_settingslist_autostart_popup_texts;
 	}
-	
+
 RESOURCE AVKON_SETTING_PAGE r_settinglist_autostart_setting_page
 {
 	label = "Auto Start";
 	type = EAknCtPopupSettingList;
-	editor_resource_id = r_settingslist_autostart_popup_setting_list; 
+	editor_resource_id = r_settingslist_autostart_popup_setting_list;
 }
 
 RESOURCE AVKON_SETTING_PAGE r_settinglist_cycletime_setting_page
 {
-	
+
 	hint_text = "Cycle Time";
 	label = "Alert Cycle";
 	type = EAknCtPopupSettingList;
-	editor_resource_id = r_settingslist_cycletime_popup_setting_list; 
+	editor_resource_id = r_settingslist_cycletime_popup_setting_list;
 }
 RESOURCE AVKON_SETTING_PAGE r_settinglist_startminute_setting_page
 {
-	
+
 	hint_text = "Start Alerts at:";
 	label = "Starting Minute";
 	type = EAknCtSlider;
-	editor_resource_id = r_time_slider; 
+	editor_resource_id = r_time_slider;
 }
 
 RESOURCE SLIDER r_time_slider
@@ -347,24 +367,24 @@ RESOURCE SLIDER r_prealert_slider
 	maxlabel = "Max";
 }
 RESOURCE AVKON_SETTING_PAGE r_settingslist_precycletime_setting_page
-	{ 
-	
+	{
+
 	label= "Pre-Cycle Warning";
 	type = EAknCtPopupSettingList;
 	editor_resource_id = r_settingslist_precycletime_popup_setting_list;
-	
+
 	}
 RESOURCE AVKON_SETTING_PAGE r_settingslist_startat_setting_page
-	{ 
-	
+	{
+
 	label= "Start Alerts at";
 	type = EAknCtPopupSettingList;
-	editor_resource_id = r_settingslist_startat_popup_setting_list; 
-	
+	editor_resource_id = r_settingslist_startat_popup_setting_list;
+
 	}
 
 //----------------------------------------------------
-//	 
+//
 //	  r_settingslist_hints_popup_setting_list
 //	  popup setting list for the hint item of the
 //	  setting list
@@ -385,9 +405,9 @@ RESOURCE POPUP_SETTING_LIST r_settingslist_startat_popup_setting_list
 	}
 
 //----------------------------------------------------
-//	 
+//
 //	  r_settingslist_hints_popup_setting_texts
-//	  popped up and non-popped up texts for the hint 
+//	  popped up and non-popped up texts for the hint
 //	  item of the setting list
 //
 //----------------------------------------------------
@@ -395,9 +415,9 @@ RESOURCE POPUP_SETTING_LIST r_settingslist_startat_popup_setting_list
 
 
 //----------------------------------------------------
-//	 
+//
 //	  r_settingslist_hints_texts
-//	  non-popped up texts for the hint 
+//	  non-popped up texts for the hint
 //	  item of the setting list
 //
 //----------------------------------------------------
@@ -409,13 +429,13 @@ RESOURCE ARRAY r_settingslist_autostart_popup_texts
 	{
 	items =
 		{
-		LBUF 
-			{ 
-			txt = "Disabled"; 
+		LBUF
+			{
+			txt = "Disabled";
 			},
-		LBUF 
-			{ 
-			txt = "Enabled"; 
+		LBUF
+			{
+			txt = "Enabled";
 			}
 		};
 	}
@@ -429,36 +449,36 @@ RESOURCE ARRAY r_settingslist_cycletime_popup_texts
 	{
 	items =
 		{
-		LBUF 
-			{ 
-			txt = "Every Minute"; 
+		LBUF
+			{
+			txt = "Every Minute";
 			},
-		LBUF 
-			{ 
-			txt = "Every 2 Minutes"; 
+		LBUF
+			{
+			txt = "Every 2 Minutes";
 			},
-			LBUF 
-			{ 
-			txt = "Every 3 Minutes"; 
+			LBUF
+			{
+			txt = "Every 3 Minutes";
 			}
 			,
-			LBUF 
-			{ 
-			txt = "Every 5 Minutes"; 
+			LBUF
+			{
+			txt = "Every 5 Minutes";
 			}
 			,
-			LBUF 
-			{ 
-			txt = "Every 10 Minutes"; 
+			LBUF
+			{
+			txt = "Every 10 Minutes";
 			}
 			,
-			LBUF 
-			{ 
-			txt = "Every 15 Minutes"; 
+			LBUF
+			{
+			txt = "Every 15 Minutes";
 			}
-			,LBUF 
-			{ 
-			txt = "Every 30 Minutes"; 
+			,LBUF
+			{
+			txt = "Every 30 Minutes";
 			}
 
 		};
@@ -470,16 +490,16 @@ RESOURCE ARRAY r_settingslist_autostart_texts
 	{
 	items =
 		{
-		AVKON_ENUMERATED_TEXT 
-			{ 
-			value = 0; 
-			text = "Disabled"; 
-			}			
+		AVKON_ENUMERATED_TEXT
+			{
+			value = 0;
+			text = "Disabled";
+			}
 		,
-		AVKON_ENUMERATED_TEXT 
-			{ 
-			value = 1; 
-			text = "Enabled"; 
+		AVKON_ENUMERATED_TEXT
+			{
+			value = 1;
+			text = "Enabled";
 			}
 		};
 	}
@@ -491,43 +511,43 @@ RESOURCE ARRAY r_settingslist_cycletime_texts
 	{
 	items =
 		{
-		AVKON_ENUMERATED_TEXT 
-			{ 
-			value = 1; 
-			text = "Every Minute"; 
+		AVKON_ENUMERATED_TEXT
+			{
+			value = 1;
+			text = "Every Minute";
 			},
-		AVKON_ENUMERATED_TEXT 
-			{ 
-			value = 2; 
-			text = "Every 2 Minutes"; 
+		AVKON_ENUMERATED_TEXT
+			{
+			value = 2;
+			text = "Every 2 Minutes";
 			},
-		AVKON_ENUMERATED_TEXT 
-			{ 
-			value = 3; 
-			text = "Every 3 Minutes"; 
+		AVKON_ENUMERATED_TEXT
+			{
+			value = 3;
+			text = "Every 3 Minutes";
 			},
-		AVKON_ENUMERATED_TEXT 
-			{ 
-			value = 5; 
-			text = "Every 5 Minutes"; 
+		AVKON_ENUMERATED_TEXT
+			{
+			value = 5;
+			text = "Every 5 Minutes";
 			},
-		AVKON_ENUMERATED_TEXT 
-			{ 
-			value = 10; 
-			text = "Every 10 Minutes"; 
+		AVKON_ENUMERATED_TEXT
+			{
+			value = 10;
+			text = "Every 10 Minutes";
 			},
-		AVKON_ENUMERATED_TEXT 
-			{ 
-			value = 15; 
-			text = "Every 15 Minutes"; 
+		AVKON_ENUMERATED_TEXT
+			{
+			value = 15;
+			text = "Every 15 Minutes";
 			},
-		AVKON_ENUMERATED_TEXT 
-			{ 
-			value = 30; 
-			text = "Every 30 Minutes"; 
+		AVKON_ENUMERATED_TEXT
+			{
+			value = 30;
+			text = "Every 30 Minutes";
 			}
-		
-			
+
+
 		};
 	}
 
@@ -537,38 +557,38 @@ RESOURCE ARRAY r_settingslist_precycletime_texts
 	{
 	items =
 		{
-		AVKON_ENUMERATED_TEXT 
-			{ 
-			value = 0; 
-			text = "Don't warn"; 
+		AVKON_ENUMERATED_TEXT
+			{
+			value = 0;
+			text = "Don't warn";
 			},
-		AVKON_ENUMERATED_TEXT 
-			{ 
-			value = 3; 
-			text = "3 Sec. Before"; 
+		AVKON_ENUMERATED_TEXT
+			{
+			value = 3;
+			text = "3 Sec. Before";
 			},
-		AVKON_ENUMERATED_TEXT 
-			{ 
-			value = 5; 
-			text = "5 Sec. Before"; 
+		AVKON_ENUMERATED_TEXT
+			{
+			value = 5;
+			text = "5 Sec. Before";
 			},
-		AVKON_ENUMERATED_TEXT 
-			{ 
-			value = 10; 
-			text = "10 Sec. Before"; 
+		AVKON_ENUMERATED_TEXT
+			{
+			value = 10;
+			text = "10 Sec. Before";
 			},
-		AVKON_ENUMERATED_TEXT 
-			{ 
-			value = 15; 
-			text = "15 Sec. Before"; 
+		AVKON_ENUMERATED_TEXT
+			{
+			value = 15;
+			text = "15 Sec. Before";
 			},
-		AVKON_ENUMERATED_TEXT 
-			{ 
-			value = 30; 
-			text = "30 Sec. Before"; 
+		AVKON_ENUMERATED_TEXT
+			{
+			value = 30;
+			text = "30 Sec. Before";
 			}
-		
-			
+
+
 		};
 	}
 
@@ -576,32 +596,32 @@ RESOURCE ARRAY r_settingslist_precycletime_popup_texts
 	{
 	items =
 		{
-		LBUF 
-			{ 
-			txt = "Don't warn"; 
+		LBUF
+			{
+			txt = "Don't warn";
 			},
-		LBUF 
-			{ 
-			txt = "3 Sec. Before"; 
+		LBUF
+			{
+			txt = "3 Sec. Before";
 			},
-			LBUF 
-			{ 
-			txt = "5 Sec. Before"; 
+			LBUF
+			{
+			txt = "5 Sec. Before";
 			}
 			,
-			LBUF 
-			{ 
-			txt = "10 Sec. Before"; 
+			LBUF
+			{
+			txt = "10 Sec. Before";
 			}
 			,
-			LBUF 
-			{ 
-			txt = "15 Sec. Before"; 
+			LBUF
+			{
+			txt = "15 Sec. Before";
 			}
 			,
-			LBUF 
-			{ 
-			txt = "30 Sec. Before"; 
+			LBUF
+			{
+			txt = "30 Sec. Before";
 			}
 		};
 	}
@@ -613,46 +633,46 @@ RESOURCE ARRAY r_settingslist_startat_texts
 	{
 	items =
 		{
-		AVKON_ENUMERATED_TEXT 
-			{ 
-			value = 1; 
-			text = "1st Minute"; 
+		AVKON_ENUMERATED_TEXT
+			{
+			value = 1;
+			text = "1st Minute";
 			},
-		AVKON_ENUMERATED_TEXT 
-			{ 
-			value = 2; 
-			text = "2nd Minute"; 
+		AVKON_ENUMERATED_TEXT
+			{
+			value = 2;
+			text = "2nd Minute";
 			},
-		AVKON_ENUMERATED_TEXT 
-			{ 
-			value = 3; 
-			text = "3rd Minute"; 
+		AVKON_ENUMERATED_TEXT
+			{
+			value = 3;
+			text = "3rd Minute";
 			},
-		AVKON_ENUMERATED_TEXT 
-			{ 
-			value = 4; 
-			text = "4th Minute"; 
+		AVKON_ENUMERATED_TEXT
+			{
+			value = 4;
+			text = "4th Minute";
 			},
-		AVKON_ENUMERATED_TEXT 
-			{ 
-			value = 5; 
-			text = "5th Minute"; 
+		AVKON_ENUMERATED_TEXT
+			{
+			value = 5;
+			text = "5th Minute";
 			},
-		AVKON_ENUMERATED_TEXT 
-			{ 
-			value = 10; 
-			text = "10th Minute"; 
-			},	
-		AVKON_ENUMERATED_TEXT 
-			{ 
-			value = 15; 
-			text = "15th Minute"; 
-			},	
-		AVKON_ENUMERATED_TEXT 
-			{ 
-			value = 30; 
-			text = "30th Minute"; 
-			}			
+		AVKON_ENUMERATED_TEXT
+			{
+			value = 10;
+			text = "10th Minute";
+			},
+		AVKON_ENUMERATED_TEXT
+			{
+			value = 15;
+			text = "15th Minute";
+			},
+		AVKON_ENUMERATED_TEXT
+			{
+			value = 30;
+			text = "30th Minute";
+			}
 		};
 	}
 
@@ -660,44 +680,44 @@ RESOURCE ARRAY r_settingslist_startat_popup_texts
 	{
 	items =
 		{
-			LBUF 
-			{ 
-			txt = "1st Minute"; 
+			LBUF
+			{
+			txt = "1st Minute";
 			},
-			LBUF 
-			{ 
-			txt = "2nd Minute"; 
+			LBUF
+			{
+			txt = "2nd Minute";
 			},
-			LBUF 
-			{ 
-			txt = "3rd Minute"; 
+			LBUF
+			{
+			txt = "3rd Minute";
 			}
 			,
-			LBUF 
-			{ 
-			txt = "4th Minute"; 
+			LBUF
+			{
+			txt = "4th Minute";
 			}
 			,
-			LBUF 
-			{ 
-			txt = "5th Minute"; 
+			LBUF
+			{
+			txt = "5th Minute";
 			}
 			,
-			LBUF 
-			{ 
-			txt = "10th Minute"; 
+			LBUF
+			{
+			txt = "10th Minute";
 			},
-			LBUF 
-			{ 
-			txt = "15th Minute"; 
+			LBUF
+			{
+			txt = "15th Minute";
 			},
-			LBUF 
-			{ 
-			txt = "30th Minute"; 
+			LBUF
+			{
+			txt = "30th Minute";
 			}
 		};
 	}
-	
+
 
 
 RESOURCE DIALOG r_message_query
@@ -777,11 +797,11 @@ RESOURCE TBUF r_alertcyclelabel_str
 }
 RESOURCE TBUF r_alertcycle1_str
 {
-	buf = "Every Min, Start at Min 00";	
+	buf = "Every Min, Start at Min 00";
 }
 RESOURCE TBUF r_alertcyclep_str //plural minutes
 {
-	buf = "Every 00 Min, Start at Min 00";	
+	buf = "Every 00 Min, Start at Min 00";
 }
 
 
@@ -816,25 +836,25 @@ RESOURCE TBUF r_disclaimer_str
 
 RESOURCE TBUF r_appver_str
 {
-	buf = "\tIncallert 3.0";	
+	buf = "\tIncallert 3.0";
 }
 
 RESOURCE TBUF r_fors60_str
 {
-	buf = "\t\tFOR S60 PHONES";	
+	buf = "\t\tFOR S60 PHONES";
 }
 
 RESOURCE TBUF r_edition_str
 {
-	buf = "\tS60 2nd Edition";	
+	buf = "\tS60 2nd Edition";
 }
 RESOURCE TBUF r_editiondetails_str
 {
-	buf = "\tS60 2nd Ed: Technically, this edition of Incallert is compatable with S60 2nd Ed Phones ONLY. Not compatible with S60 3rd Ed Phones.";	
+	buf = "\tS60 2nd Ed: Technically, this edition of Incallert is compatable with S60 2nd Ed Phones ONLY. Not compatible with S60 3rd Ed Phones.";
 }
 
 
- 
+
 
 RESOURCE TBUF r_helpintro_1str
 {

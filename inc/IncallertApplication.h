@@ -51,6 +51,10 @@ protected: // from CAknApplication
     CApaDocument* CreateDocumentL();
     };
 
-    static const TUid KUidIncallert = {0x2001163B};
+#ifdef EKA2
+    static const TUid KUidIncallert = {0xA000C40E};
+#else
+    static const TUid KUidIncallert = {0x2001A3E4};
+#endif
 
 #endif // __INCALLERT_APPLICATION_H__

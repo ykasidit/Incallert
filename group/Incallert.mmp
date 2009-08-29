@@ -78,8 +78,7 @@ LIBRARY   aknicon.lib
 
 START BITMAP iclmain.mbm
 HEADER
-SOURCEPATH ..\
-source c16,1 main.bmp main_mask.bmp
+source c16,1 ..\main.bmp ..\main_mask.bmp
 END
 
 EPOCSTACKSIZE 0x8000
@@ -108,7 +107,7 @@ RESOURCE        ..\data\Incallert_caption.rss
 LANG EN
 
 VENDORID	  	  0
-SECUREID		  0x2001BA2E
+SECUREID		  0xA000C40E
 CAPABILITY	  	  LocalServices NetworkServices ReadUserData UserEnvironment WriteUserData
 
 #ifdef ENABLE_ABIV2_MODE
@@ -116,10 +115,12 @@ DEBUGGABLE
 #endif
 // End of File
 
-START RESOURCE [2001BA2E].rss
-	TARGET [2001BA2E].RSC
+/*
+ * TODO: 3rd auto-start later
+START RESOURCE [A000C40E].rss
+	TARGET [A000C40E].RSC
 	TARGETPATH \resource
-END
+END*/
 
 #endif
 
