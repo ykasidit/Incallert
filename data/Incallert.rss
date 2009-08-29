@@ -70,10 +70,6 @@ RESOURCE AVKON_VIEW r_settings_view
 
     }
 
-RESOURCE AVKON_VIEW r_buy_view
-{
-	cba = R_AVKON_SOFTKEYS_OK_CANCEL;
-}
 
 RESOURCE AVKON_VIEW r_help_view
 {
@@ -703,25 +699,6 @@ RESOURCE ARRAY r_settingslist_startat_popup_texts
 	}
 	
 
-/*RESOURCE DIALOG r_info_dialog
-{
-	flags = EEikDialogFlagNoDrag | EEikDialogFlagCbaButtons | EEikDialogFlagWait|EEikDialogFlagFillAppClientRect;
-	buttons = R_AVKON_SOFTKEYS_OK_EMPTY;
-	items = {
-				DLG_LINE
-				{
-					id= EInfoDlgLabel;
-					type = EEikCtGlobalTextEditor;					
-					control = LABEL
-					{
-						horiz_align=EEikLabelAlignHLeft;
-						
-					};
-					
-				}
-			};
-}*/
-
 
 RESOURCE DIALOG r_message_query
 {
@@ -749,57 +726,7 @@ RESOURCE DIALOG r_message_query
    };
 }
 
-RESOURCE DIALOG r_regkey_number_layout
-    {
-    flags = EGeneralQueryFlags;
-    buttons = R_AVKON_SOFTKEYS_OK_EMPTY;
-    items =
-        {
-        DLG_LINE
-            {
-            type = EAknCtQuery;
-            id = EGeneralQuery;
-            control= AVKON_DATA_QUERY
-                {
-                layout = ENumberLayout;
-                label = "Enter Key:";
 
-                control = AVKON_INTEGER_EDWIN
-                    {
-                    min = 0;
-                    max = 65535;
-                    };
-                };
-            }
-        };
-    }
-/*
-RESOURCE TBUF r_buyheader_incallert_str
-{
-	buf = "\tPlease buy Incallert from "; 
-}
-
-
-RESOURCE TBUF r_buy_location_str
-{
-	buf = "where you downloaded Incallert";
-}
-
-RESOURCE TBUF R_EXPIRY_LOAD_AT_NOTE
-{
-	buf = "Trial App.Expired\n Please download updated version.";
-}
-
-RESOURCE TBUF r_buyfooter_incallert_str
-{
-	buf = ", and get the registration key from there."; 
-}
-
-RESOURCE TBUF r_register_incallert_str
-{
-	buf = "\tIf you already bought Incallert 1.1, proceed to enter the registration key by pressing \"Ok\""; 
-}
-*/
 
 
 RESOURCE TBUF r_incallert_str
@@ -889,7 +816,7 @@ RESOURCE TBUF r_disclaimer_str
 
 RESOURCE TBUF r_appver_str
 {
-	buf = "\tIncallert 2.0";	
+	buf = "\tIncallert 3.0";	
 }
 
 RESOURCE TBUF r_fors60_str

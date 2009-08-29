@@ -22,6 +22,7 @@
 #include <saclient.h>
 #include <aknappui.h>
 #include <aknglobalnote.h>
+#include <etel.h>
 
 class CIncallertAppUi;
 
@@ -41,7 +42,7 @@ class CLineStatusHandler : CActive
 	TBool inCall;
 	TUint callSeconds;
 	TSysAgentEvent iEvent;
-	RSystemAgent* iSysAgent;
+
 	//From CActive
 	TUint  preAlertTimeSeconds;
 	TUint  cycleTimeMinutes;
@@ -62,6 +63,16 @@ class CLineStatusHandler : CActive
 	CPeriodic *iPeriodicCycle;
 	CAknGlobalNote* globalNote;
 	CIncallertAppUi *appui;
+
+	///////////////
+	RTelServer iTelServer;
+
+	RTelServer::TPhoneInfo iPhoneInfo;
+	RPhone iPhone;
+
+	RPhone::TLineInfo iLineInfo;
+	RLine iLine;
+	//////////////////
 
 	TInt curCycleTime;
 	TInt curStartMinute;

@@ -1,4 +1,4 @@
-/*  
+/*
     Copyright (C) 2009 Kasidit Yusuf.
 
     This file is part of Incallert.
@@ -23,33 +23,33 @@
 
 #include <aknview.h>
 
-class CRegisterTextContainer;
+
 class CScrollRichTextContainer;
 
 class CAboutAppView :  public CAknView
     {
 public:
 
-  	 static  CAknView* NewL(TInt viewID);	
+  	 static  CAknView* NewL(TInt viewID);
   	 static  CAknView* NewLC(TInt viewID);
-    ~CAboutAppView();	
+    ~CAboutAppView();
 
     TUid Id() const;
-	void HandleCommandL(TInt aCommand);	    
+	void HandleCommandL(TInt aCommand);
 	void DoActivateL(const TVwsViewId& aPrevViewId,
                    TUid aCustomMessageId,
                    const TDesC8& aCustomMessage);
 
-	void DoDeactivate();    
-	CScrollRichTextContainer *iContainer;	
-	CAboutAppView(TInt viewID);	
+	void DoDeactivate();
+	CScrollRichTextContainer *iContainer;
+	CAboutAppView(TInt viewID);
 
 protected:
 
-    virtual void ConstructL();    
-    TUid iId;  
-    
+    virtual void ConstructL();
+    TUid iId;
+
     };
 
 
-#endif 
+#endif

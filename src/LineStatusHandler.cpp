@@ -23,6 +23,7 @@
 #include <Incallert.rsg>
 #include "Incallert.hrh"
 #include <aknnotewrappers.h>
+#include <commdb.h>
 
 #define MILLION 1000000
 
@@ -91,12 +92,28 @@ CLineStatusHandler::CLineStatusHandler() : CActive(EPriorityStandard)
 
 void CLineStatusHandler::ConstructL()
 {
-	iSysAgent =  new (ELeave) RSystemAgent;
 	CActiveScheduler::Add(this);
-
 
 	iPeriodicPreCycle = CPeriodic::NewL(0);
 	iPeriodicCycle = CPeriodic::NewL(0);
+
+	TBuf<96> aTsyName;
+	CCommsDatabase* db = CCommsDatabase::NewL(EDatabaseTypeUnspecified);
+	CleanupStack::PushL(db);
+	CCommsDbTableView* table = db->OpenTableLC(TPtrC(MODEM));
+	table->GotoFirstRecord();
+	table->ReadTextL(TPtrC(MODEM_TSY_NAME),aTsyName);
+	CleanupStack::PopAndDestroy(2); // table,db
+
+
+		User::LeaveIfError(iTelServer.Connect());
+		User::LeaveIfError(iTelServer.LoadPhoneModule(aTsyName));
+		User::LeaveIfError(iTelServer.GetPhoneInfo(0,iPhoneInfo));
+		User::LeaveIfError(iPhone.Open(iTelServer,iPhoneInfo.iName));
+		User::LeaveIfError(iPhone.GetLineInfo(0,iLineInfo));
+		User::LeaveIfError(iLine.Open(iPhone,iLineInfo.iName));
+
+
 }
 
 CLineStatusHandler::~CLineStatusHandler()
