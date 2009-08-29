@@ -63,16 +63,12 @@ CLineStatusHandler* CLineStatusHandler::NewLC(CIncallertAppUi *ui)
 TInt CLineStatusHandler::Start()
 {
 
-	TInt ret;
+
 	Cancel();
-	ret = iSysAgent->Connect();
-	iSysAgent->SetEventBufferEnabled(ETrue);
-	iEvent.SetRequestStatus(iStatus);
-    iEvent.SetUid(KUidCurrentCall);
-    iSysAgent->NotifyOnEvent(iEvent);
+	iLine.NotifyStatusChange(iStatus,iCallStatus);
     SetActive();
 
-    return ret;
+    return 1;
 
 }
 CLineStatusHandler::CLineStatusHandler() : CActive(EPriorityStandard)
@@ -119,11 +115,11 @@ void CLineStatusHandler::ConstructL()
 CLineStatusHandler::~CLineStatusHandler()
 {
 	Cancel();
-	if(iSysAgent)
-	{
-		delete iSysAgent;
-		iSysAgent= NULL;
-	}
+
+	iLine.Close();
+	iPhone.Close();
+	iTelServer.Close();
+
 	if(iPeriodicPreCycle)
 	{
 		iPeriodicPreCycle->Cancel();
@@ -153,14 +149,12 @@ void CLineStatusHandler::RunL()
 	}
 
 
-		TInt state = iEvent.State();
-		TUid uid = iEvent.Uid();
-		if(uid == KUidCurrentCall)
-		{
-				switch(state)
+
+
+				switch(iCallStatus)
 				{
-					case CallDisconnecting:
-					case CallNone:
+					case RCall::EStatusHangingUp:
+					case RCall::EStatusIdle:
 					{
 						inCall = EFalse;
 						iPeriodicPreCycle->Cancel();
@@ -168,7 +162,7 @@ void CLineStatusHandler::RunL()
 
 					}
 					break;
-					case CallVoice:
+					case RCall::EStatusConnected:
 					{
 
 
@@ -191,7 +185,7 @@ void CLineStatusHandler::RunL()
 					break;
 				}
 
-		}
+
 
 		Start();
 }
@@ -199,11 +193,7 @@ void CLineStatusHandler::RunL()
 
 void CLineStatusHandler::DoCancel()
 {
-	if(iSysAgent)
-	{
-		iSysAgent->NotifyEventCancel();
-		iSysAgent->Close();
-	}
+	iLine.NotifyStatusChangeCancel();
 
 	if(iPeriodicPreCycle)
 		{
@@ -227,9 +217,9 @@ TInt CLineStatusHandler::PeriodicPreCycleCallBack(TAny* that)
 
 	if(((CLineStatusHandler*)that)->inCall)
 	{
-		TInt status;
-		status = ((CLineStatusHandler*)that)->iSysAgent->GetState(KUidCurrentCall);
-		if(status == ESACallVoice)
+		RCall::TStatus status;
+		((CLineStatusHandler*)that)->iLine.GetStatus(status);
+		if(status == RCall::EStatusConnected)
 			{
 				((CLineStatusHandler*)that)->inCall = ETrue;
 				_LIT(msg,"10 Secs left");
@@ -247,18 +237,19 @@ TInt CLineStatusHandler::PeriodicPreCycleCallBack(TAny* that)
 TInt CLineStatusHandler::PeriodicCycleCallBack(TAny* that)
 	{
 			if(((CLineStatusHandler*)that)->inCall)
-	{
-		TInt status;
-		status = ((CLineStatusHandler*)that)->iSysAgent->GetState(KUidCurrentCall);
-		if(status == ESACallVoice)
 			{
-				((CLineStatusHandler*)that)->inCall = ETrue;
-				_LIT(msg,"New Minute");
-	        	CAknInformationNote* informationNote = new (ELeave) CAknInformationNote;
-	        	informationNote->ExecuteLD(msg);
-				return 1;
+					RCall::TStatus status;
+					((CLineStatusHandler*)that)->iLine.GetStatus(status);
+					if(status == RCall::EStatusConnected)
+					{
+						((CLineStatusHandler*)that)->inCall = ETrue;
+						_LIT(msg,"New Minute");
+						CAknInformationNote* informationNote = new (ELeave) CAknInformationNote;
+						informationNote->ExecuteLD(msg);
+						return 1;
+					}
 			}
-	}
+
 		((CLineStatusHandler*)that)->iPeriodicCycle->Cancel();
 		((CLineStatusHandler*)that)->inCall = EFalse;
 

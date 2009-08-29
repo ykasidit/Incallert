@@ -41,7 +41,7 @@ class CLineStatusHandler : CActive
 	TBool loaded;
 	TBool inCall;
 	TUint callSeconds;
-	TSysAgentEvent iEvent;
+	RCall::TStatus iCallStatus;
 
 	//From CActive
 	TUint  preAlertTimeSeconds;
