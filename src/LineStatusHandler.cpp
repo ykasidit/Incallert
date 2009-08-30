@@ -90,8 +90,8 @@ void CLineStatusHandler::ConstructL()
 {
 	CActiveScheduler::Add(this);
 
-	iPeriodicPreCycle = CPeriodic::NewL(0);
-	iPeriodicCycle = CPeriodic::NewL(0);
+	iPeriodicPreCycle = CPeriodic::NewL(EPriorityHigh);
+	iPeriodicCycle = CPeriodic::NewL(EPriorityHigh);
 
 	TBuf<96> aTsyName;
 	CCommsDatabase* db = CCommsDatabase::NewL(EDatabaseTypeUnspecified);
@@ -165,6 +165,7 @@ void CLineStatusHandler::RunL()
 					case RCall::EStatusConnected:
 					{
 
+						iConnectedTime.HomeTime();
 
 						inCall = ETrue;
 						iPeriodicPreCycle->Cancel();
@@ -205,6 +206,27 @@ void CLineStatusHandler::DoCancel()
 		}
 }
 
+void CLineStatusHandler::ShowDurAndMsg(const TDesC& aStr)
+{
+	TTime now;
+	now.HomeTime();
+	TTimeIntervalSeconds secs(0);
+	if(KErrNone == now.SecondsFrom(iConnectedTime,secs))
+	{
+		TBuf<96> buf;
+		_LIT(KDurFormatStr,"%02d:%02d - ");
+		buf.Format(KDurFormatStr,(secs.Int()/60),(secs.Int()%60));
+		buf += aStr;
+		CAknWarningNote* informationNote = new (ELeave) CAknWarningNote(ETrue);
+		informationNote->ExecuteLD(buf);
+	}
+	else
+	{
+
+		CAknWarningNote* informationNote = new (ELeave) CAknWarningNote(ETrue);
+		informationNote->ExecuteLD(aStr);
+	}
+}
 TInt CLineStatusHandler::RunError(TInt aError)
 {
 	if(aError)
@@ -221,10 +243,29 @@ TInt CLineStatusHandler::PeriodicPreCycleCallBack(TAny* that)
 		((CLineStatusHandler*)that)->iLine.GetStatus(status);
 		if(status == RCall::EStatusConnected)
 			{
-				((CLineStatusHandler*)that)->inCall = ETrue;
-				_LIT(msg,"10 Secs left");
-	        	CAknWarningNote* informationNote = new (ELeave) CAknWarningNote;
-	        	informationNote->ExecuteLD(msg);
+
+			((CLineStatusHandler*)that)->inCall = ETrue;
+
+			///////////////////
+			TBool isvisible = EFalse;
+			if(CEikonEnv::Static()->RootWin().OrdinalPosition() == 0 && CEikonEnv::Static()->RootWin().OrdinalPriority() >= ECoeWinPriorityNormal)
+				isvisible = ETrue;
+			if(!isvisible)
+			{
+				StartPopUp();
+			}
+			///////////////////
+
+			_LIT(msg,"new minute coming...");
+			((CLineStatusHandler*)that)->ShowDurAndMsg(msg);
+
+			///////////////////
+			if(!isvisible)
+			{
+				EndPopUp();
+			}
+			///////////////////
+
 				return 1;
 			}
 	}
@@ -232,6 +273,22 @@ TInt CLineStatusHandler::PeriodicPreCycleCallBack(TAny* that)
 		((CLineStatusHandler*)that)->inCall = EFalse;
 
 		return 1;
+}
+
+void CLineStatusHandler::StartPopUp()
+{
+	CCoeEnv::Static()->RootWin().SetOrdinalPosition(0, ECoeWinPriorityAlwaysAtFront+114);
+	TApaTask task(CEikonEnv::Static()->WsSession( ));
+	task.SetWgId(CEikonEnv::Static()->RootWin().Identifier());
+	task.BringToForeground();
+}
+
+void CLineStatusHandler::EndPopUp()
+{
+	CCoeEnv::Static()->RootWin().SetOrdinalPosition(0, ECoeWinPriorityNormal);
+	TApaTask task(CEikonEnv::Static()->WsSession( ));
+	task.SetWgId(CEikonEnv::Static()->RootWin().Identifier());
+	task.SendToBackground();
 }
 
 TInt CLineStatusHandler::PeriodicCycleCallBack(TAny* that)
@@ -243,9 +300,28 @@ TInt CLineStatusHandler::PeriodicCycleCallBack(TAny* that)
 					if(status == RCall::EStatusConnected)
 					{
 						((CLineStatusHandler*)that)->inCall = ETrue;
+
+						///////////////////
+						TBool isvisible = EFalse;
+						if(CEikonEnv::Static()->RootWin().OrdinalPosition() == 0 && CEikonEnv::Static()->RootWin().OrdinalPriority() >= ECoeWinPriorityNormal)
+							isvisible = ETrue;
+
+						if(!isvisible)
+						{
+							StartPopUp();
+						}
+						////////////////////////
+
 						_LIT(msg,"New Minute");
-						CAknInformationNote* informationNote = new (ELeave) CAknInformationNote;
-						informationNote->ExecuteLD(msg);
+						((CLineStatusHandler*)that)->ShowDurAndMsg(msg);
+
+						///////////////////
+						if(!isvisible)
+						{
+							EndPopUp();
+						}
+						///////////////////
+
 						return 1;
 					}
 			}

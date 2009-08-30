@@ -34,6 +34,11 @@ class CLineStatusHandler : CActive
 	static CLineStatusHandler* NewLC(CIncallertAppUi *ui);
 	TInt Start();
 
+	static void StartPopUp();
+	static void EndPopUp();
+
+	void ShowDurAndMsg(const TDesC& aStr);
+
 	~CLineStatusHandler();
 
 	void ConstructL();
@@ -78,6 +83,8 @@ class CLineStatusHandler : CActive
 	TInt curStartMinute;
 	TBool curPreCycleAlertEnabled;
 	TInt curPreCycleTime;
+
+	TTime iConnectedTime;
 
 	private:
 	CLineStatusHandler();
