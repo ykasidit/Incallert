@@ -43,7 +43,7 @@ void CAboutTextContainer::AddTextToEditorL()
 	TRgb NormalTextColor = KRgbBlack;
 
 
-	#ifdef __SERIES60_3X__
+	#ifdef EKA2
 	AknsUtils::GetCachedColor(skin, NormalTextColor, KAknsIIDQsnTextColors, EAknsCIQsnTextColorsCG6);
 	#else
 	TAknsItemID data;

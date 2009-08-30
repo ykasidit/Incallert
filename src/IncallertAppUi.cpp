@@ -122,7 +122,7 @@ void CIncallertAppUi::ConstructL()
 		if(ret!=KErrNone)
 	    	{
 
-			    _LIT(msg,"Incallert's system inspector failed to start");
+			    _LIT(msg,"Incallert's call monitor failed to start");
 			    CAknErrorNote* informationNote = new (ELeave) CAknErrorNote(ETrue);
 			    //informationNote->SetTimeout(CAknNoteDialog::EShortTimeout);
 			   	informationNote->ExecuteLD(msg);

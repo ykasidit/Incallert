@@ -7,7 +7,9 @@ The original version was developed and deployed at http://www.clearevo.com/incal
 
 Installing
 -----------
-Install the .sis file for S60 2nd, .sisx for S60 3rd.
+Install the .sis file for S60 2nd, .sisx for S60 3rd. 
+NOTE: S60 3rd phones must go to "Tools" > "App.mgr" > Options > Settings > Software Installation > set to "All"
+
 
 Compiling
 -----------

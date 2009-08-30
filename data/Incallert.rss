@@ -69,7 +69,7 @@ RESOURCE LOCALISABLE_APP_INFO r_localisable_app_info
 	caption_and_icon =
 	CAPTION_AND_ICON_INFO
 		{
-		caption = qtn_caption_string;
+		caption = "Incallert";
 
 		number_of_icons = 1;
 		icon_file = "\\resource\\apps\\Incallert.mif";
@@ -105,19 +105,18 @@ RESOURCE AVKON_VIEW r_about_view
 RESOURCE RTXTED R_MYRICHTEXTEDITOR_EDITOR
 	{
 
-
-	textlimit=512;
-
-
-	flags= EEikEdwinInclusiveSizeFixed|
+flags= EEikEdwinInclusiveSizeFixed|
 EEikEdwinNoAutoSelection|
 EEikEdwinDisplayOnly|
 EEikEdwinReadOnly|
 EEikEdwinLineCursor|
 EEikEdwinNoHorizScrolling|EEikEdwinAvkonDisableCursor;
-	fontnameflags = EGulAllFonts;
-	avkon_flags= EAknEditorFlagEnableScrollBars;
 
+fontcontrolflags = EGulFontControlAll;
+fontnameflags = EGulNoSymbolFonts;
+default_input_mode = EAknEditorNullInputMode;
+
+textlimit=10240;
 	}
 
 
@@ -846,11 +845,19 @@ RESOURCE TBUF r_fors60_str
 
 RESOURCE TBUF r_edition_str
 {
+#ifdef EKA2
+	buf = "\tS60 3rd Edition";
+#else
 	buf = "\tS60 2nd Edition";
+#endif
 }
 RESOURCE TBUF r_editiondetails_str
 {
-	buf = "\tS60 2nd Ed: Technically, this edition of Incallert is compatable with S60 2nd Ed Phones ONLY. Not compatible with S60 3rd Ed Phones.";
+#ifdef EKA2
+	buf = "\tThis edition of Incallert is compatable with S60 3rd Ed Phones. If your friend has an older S60 phone, a S60 2nd Ed version is also available at www.ClearEvo.com - please visit!";
+#else
+	buf = "\tThis edition of Incallert is compatable with S60 2nd Ed Phones. If your friend has a newer S60 phone, a S60 3rd Ed version is also available at www.ClearEvo.com - please visit!";
+#endif
 }
 
 
@@ -909,7 +916,7 @@ RESOURCE TBUF r_helpdetails5_str
 
 RESOURCE TBUF r_incallerthelpend_str
 {
-	buf = "\tThis software is FREE! Please visit www.ClearEvo.com for more! Please also make your mark on www.WorldPaintWall.com - The Net's Graffiti Wall of the World!";
+	buf = "\tStarting from version 3.0, Incallert is now FREE SOFTWARE! (GNU GPL) Please come visit www.ClearEvo.com for more info and Incallert's source-code!";
 }
 
 RESOURCE TBUF r_noteonalerts_str
@@ -919,5 +926,5 @@ RESOURCE TBUF r_noteonalerts_str
 
 RESOURCE TBUF r_wap_str
 {
-	buf = "\tWant to get Incallert directly via WAP on another S60 2nd Ed phone? Just open up \"wap.ClearEvo.com\" in the phone's browser and download/install from there.";
+	buf = "\tWant to get Incallert directly via WAP on another S60 phone? Just open up \"wap.ClearEvo.com\" in the phone's browser and download/install from there.";
 }

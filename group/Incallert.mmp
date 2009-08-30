@@ -21,6 +21,9 @@
 TARGET			Incallert.exe
 TARGETTYPE		exe
 UID		  		0x100039CE 0xA000C40E
+VENDORID	  	0
+SECUREID		0xA000C40E
+CAPABILITY
 #else
 TARGET          Incallert.app
 TARGETTYPE      app
@@ -105,10 +108,6 @@ RESOURCE        ..\data\Incallert_caption.rss
 
 #ifdef EKA2
 LANG EN
-
-VENDORID	  	  0
-SECUREID		  0xA000C40E
-CAPABILITY	  	  LocalServices NetworkServices ReadUserData UserEnvironment WriteUserData
 
 #ifdef ENABLE_ABIV2_MODE
 DEBUGGABLE

@@ -69,7 +69,7 @@ void CMyRichTextEditor::SetColor(TRgb color)
 {
 	//3rd themes are stong colored
 	
-/*	#ifdef __SERIES60_3X__
+/*	#ifdef EKA2
 		color.SetRed(255-color.Red());
 		color.SetGreen(255-color.Green());
 		color.SetBlue(255-color.Blue());
@@ -117,7 +117,7 @@ void CMyRichTextEditor::SetSystemFont(TInt aFontEnum)
        {
 
                 		
-	#ifdef __SERIES60_3X__
+	#ifdef EKA2
 //	        editorFont = CEikonEnv::Static()->TitleFont();
 //	       editorFont = CEikonEnv::Static()->TitleFont();
 			TBuf<128> font;			
@@ -144,7 +144,7 @@ void CMyRichTextEditor::SetSystemFont(TInt aFontEnum)
 
 
 		
-	#ifdef __SERIES60_3X__
+	#ifdef EKA2
 
 			TBuf<128> font;			
 			TTypefaceSupport myTypefaceSupport;	
@@ -172,14 +172,14 @@ void CMyRichTextEditor::SetSystemFont(TInt aFontEnum)
 		}
     	break;
 
-#ifdef __SERIES60_3X__
+#ifdef EKA2
 		case ESymbolFont:
 		#endif
 		case ELegendFont:
 		{
 
 		
-	#ifdef __SERIES60_3X__
+	#ifdef EKA2
 
 //	        editorFont = (CFont *)AknLayoutUtils::FontFromId(EAknLogicalFontPrimaryFont);
 
@@ -202,7 +202,7 @@ TBuf<128> font;
 		}
          break;
          
-#ifndef __SERIES60_3X__
+#ifndef EKA2
 		case ESymbolFont:
 			editorFont = LatinPlain12();
 	#endif

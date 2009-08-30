@@ -51,7 +51,7 @@
      id="base"
      showgrid="false"
      inkscape:zoom="5.2500596"
-     inkscape:cx="39.924475"
+     inkscape:cx="49.190679"
      inkscape:cy="43.9995"
      inkscape:window-x="110"
      inkscape:window-y="145"
@@ -66,25 +66,14 @@
        id="tspan2460" /></text>
   <text
      xml:space="preserve"
-     style="font-size:21.19855309px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-     x="7.5510116"
-     y="38.156963"
+     style="font-size:21.19855309000000076px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans Bold"
+     x="7.3713069"
+     y="51.885395"
      id="text2462"
      transform="scale(1.0599276,0.9434607)"><tspan
        sodipodi:role="line"
        id="tspan2464"
-       x="7.5510116"
-       y="38.156963"
-       style="font-style:italic;font-weight:bold">00:59</tspan></text>
-  <text
-     xml:space="preserve"
-     style="font-size:16px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-     x="10.76176"
-     y="60.856468"
-     id="text2466"><tspan
-       sodipodi:role="line"
-       id="tspan2468"
-       x="10.76176"
-       y="60.856468"
-       style="font-size:16px;font-style:normal">Incallert</tspan></text>
+       x="7.3713069"
+       y="51.885395"
+       style="font-style:normal;font-weight:bold;-inkscape-font-specification:Bitstream Vera Sans Bold;font-size:28">00:59</tspan></text>
 </svg>

@@ -153,7 +153,7 @@ void CScrollRichTextContainer::SizeChanged()
 
 
 
-	#ifdef __SERIES60_3X__
+	#ifdef EKA2
 	TRect ScrollBarRect = iEditor->ScrollBarFrame()->VerticalScrollBar()->Rect();
 	iEditor->SetExtent(TPoint(0,0),
 		TSize(rect.Width()-ScrollBarRect.Width(), rect.Height()));

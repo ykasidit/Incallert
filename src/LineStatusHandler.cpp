@@ -68,7 +68,7 @@ TInt CLineStatusHandler::Start()
 	iLine.NotifyStatusChange(iStatus,iCallStatus);
     SetActive();
 
-    return 1;
+    return KErrNone;
 
 }
 CLineStatusHandler::CLineStatusHandler() : CActive(EPriorityStandard)
