@@ -206,7 +206,7 @@ void CLineStatusHandler::DoCancel()
 		}
 }
 
-void CLineStatusHandler::ShowDurAndMsg(const TDesC& aStr)
+void CLineStatusHandler::ShowDurAndMsg(const TDesC& aStr, TNotifyType aType)
 {
 	TTime now;
 	now.HomeTime();
@@ -217,8 +217,16 @@ void CLineStatusHandler::ShowDurAndMsg(const TDesC& aStr)
 		_LIT(KDurFormatStr,"%02d:%02d - ");
 		buf.Format(KDurFormatStr,(secs.Int()/60),(secs.Int()%60));
 		buf += aStr;
+		if(aType == EWarning)
+		{
 		CAknWarningNote* informationNote = new (ELeave) CAknWarningNote(ETrue);
 		informationNote->ExecuteLD(buf);
+		}
+		else
+		{
+		CAknInformationNote* informationNote = new (ELeave) CAknInformationNote(ETrue);
+		informationNote->ExecuteLD(buf);
+		}
 	}
 	else
 	{
@@ -257,7 +265,7 @@ TInt CLineStatusHandler::PeriodicPreCycleCallBack(TAny* that)
 			///////////////////
 
 			_LIT(msg,"new minute coming...");
-			((CLineStatusHandler*)that)->ShowDurAndMsg(msg);
+			((CLineStatusHandler*)that)->ShowDurAndMsg(msg, EWarning);
 
 			///////////////////
 			if(!isvisible)
@@ -313,7 +321,7 @@ TInt CLineStatusHandler::PeriodicCycleCallBack(TAny* that)
 						////////////////////////
 
 						_LIT(msg,"New Minute");
-						((CLineStatusHandler*)that)->ShowDurAndMsg(msg);
+						((CLineStatusHandler*)that)->ShowDurAndMsg(msg, EInfo);
 
 						///////////////////
 						if(!isvisible)

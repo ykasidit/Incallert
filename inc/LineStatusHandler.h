@@ -37,7 +37,13 @@ class CLineStatusHandler : CActive
 	static void StartPopUp();
 	static void EndPopUp();
 
-	void ShowDurAndMsg(const TDesC& aStr);
+	enum TNotifyType
+	{
+		EWarning,
+		EInfo
+	};
+
+	void ShowDurAndMsg(const TDesC& aStr,TNotifyType aType);
 
 	~CLineStatusHandler();
 
