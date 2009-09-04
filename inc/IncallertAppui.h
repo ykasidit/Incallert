@@ -49,6 +49,7 @@ public:
   */
     void ConstructL();
 
+
 /*!
   @function CIncallertAppUi
 
@@ -82,6 +83,14 @@ public:
     #endif
     }
 
+#ifdef EKA2
+TBool ProcessCommandParametersL( CApaCommandLine &aCommandLine );
+#else
+TBool ProcessCommandParametersL(TApaCommand aCommand,TFileName& aDocumentName);
+#endif
+
+void HandleWsEventL(const TWsEvent &aEvent, CCoeControl *aDestination);//handle red-key press
+
 
 public: // from CAknAppUi
 /*!
@@ -109,6 +118,8 @@ public: // from CAknAppUi
     CAknNavigationDecorator*        iDecoratedTabGroup;
 
     TKeyResponse HandleKeyEventL(const TKeyEvent& aKeyEvent,TEventCode aType);
+
+    TBool iAutoStarted;
 
     };
 

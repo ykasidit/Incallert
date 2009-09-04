@@ -114,12 +114,10 @@ DEBUGGABLE
 #endif
 // End of File
 
-/*
- * TODO: 3rd auto-start later
 START RESOURCE [A000C40E].rss
 	TARGET [A000C40E].RSC
 	TARGETPATH \resource
-END*/
+END
 
 #endif
 

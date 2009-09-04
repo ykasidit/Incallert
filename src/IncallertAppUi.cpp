@@ -235,3 +235,64 @@ CIncallertAppUi::~CIncallertAppUi()
 
     }
 
+
+#ifdef EKA2
+TBool CIncallertAppUi::ProcessCommandParametersL( CApaCommandLine &aCommandLine )
+#else
+TBool CIncallertAppUi::ProcessCommandParametersL(TApaCommand aCommand,TFileName& aDocumentName)
+#endif
+{
+
+	#ifdef EKA2
+		if(aCommandLine.OpaqueData().Length() > 0)
+	#else
+		if(aDocumentName.Length() > 0)
+	#endif
+	  {
+	      // Opaque data exists, app. has been manually started from the menu
+	  	iAutoStarted = EFalse;
+	  	iEikonEnv->RootWin().SetOrdinalPosition(-1,ECoeWinPriorityNormal);
+
+		TApaTask task(iEikonEnv->WsSession( ));
+		task.SetWgId(CEikonEnv::Static()->RootWin().Identifier());
+		task.BringToForeground();
+	  }
+	  else
+	  {
+		iAutoStarted = ETrue;
+
+		iEikonEnv->RootWin().SetOrdinalPosition(-1,ECoeWinPriorityNormal);
+
+		TApaTask task(iEikonEnv->WsSession( ));
+		task.SetWgId(CEikonEnv::Static()->RootWin().Identifier());
+		task.SendToBackground();
+
+	  }
+
+#ifdef EKA2
+   return CEikAppUi::ProcessCommandParametersL( aCommandLine );
+#else
+   return CEikAppUi::ProcessCommandParametersL( aCommand,aDocumentName );
+#endif
+}
+
+void CIncallertAppUi::HandleWsEventL(const TWsEvent &aEvent, CCoeControl *aDestination)
+	{
+		switch (aEvent.Type())
+		{
+			//case KAknUidValueEndKeyCloseEvent:  0x101F87F0
+			case 0x101F87F0:
+			{
+				TApaTask task(iEikonEnv->WsSession( ));
+				task.SetWgId(CEikonEnv::Static()->RootWin().Identifier());
+				task.SendToBackground();
+			}
+			break;
+
+			default:
+			{
+			CAknAppUi::HandleWsEventL(aEvent, aDestination);
+			}
+		}
+	}
+
