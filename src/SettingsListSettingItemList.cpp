@@ -97,7 +97,11 @@ CAknSettingItem* CSettingsListSettingItemList::CreateSettingItemL(TInt aIdentifi
 
 		case ESettingListAutoStartItem:
 			{
+#ifndef EKA2
 			autoLoad = CIncallertSettingsView::AutoStartFilePresent();
+#else
+			autoLoad = EFalse; //self-signed apps cant auto-start
+#endif
 
 			settingItem = new (ELeave) CAknBinaryPopupSettingItem(aIdentifier,autoLoad );
 			}
@@ -187,8 +191,11 @@ void CSettingsListSettingItemList::EditItemL (TInt aIndex, TBool aCalledFromMenu
 
 
 
-
+#ifndef EKA2
 	autoLoad = CIncallertSettingsView::AutoStartFilePresent();
+#else
+	autoLoad = EFalse; //self-signed apps cant autostart
+#endif
 
 
 #ifndef EKA2
@@ -263,6 +270,13 @@ void CSettingsListSettingItemList::EditItemL (TInt aIndex, TBool aCalledFromMenu
 		}
 
 #else
+
+		_LIT(msg,"Auto-Start for S60 3rd required symbian-sign but incallart is self-signed so this cant be Enabled" );
+		CAknConfirmationNote* informationNote = new (ELeave) CAknConfirmationNote(ETrue);
+		informationNote->SetTimeout(CAknNoteDialog::ELongTimeout);
+		informationNote->ExecuteLD(msg);
+		return;
+
 		//s60 3rd our app is always started, make a file as flag to let app hide and then exit after a few seconds (it's a forum nokia Knowledge base issue that if autostarted app exits too soon then phone could report that the app is currupted)
 		_LIT(KNoASFileFlag,"noautostart.dat");
 			TFileName fn(KNoASFileFlag);
