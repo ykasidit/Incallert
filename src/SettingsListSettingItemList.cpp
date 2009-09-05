@@ -262,6 +262,43 @@ void CSettingsListSettingItemList::EditItemL (TInt aIndex, TBool aCalledFromMenu
 			}
 		}
 
+#else
+		//s60 3rd our app is always started, make a file as flag to let app hide and then exit after a few seconds (it's a forum nokia Knowledge base issue that if autostarted app exits too soon then phone could report that the app is currupted)
+		_LIT(KNoASFileFlag,"noautostart.dat");
+			TFileName fn(KNoASFileFlag);
+			CIncallertAppUi::CompleteWithPrivatePathL(fn);
+
+		if(!autoLoad)
+		{
+			RFs fs = iCoeEnv->FsSession();
+			User::LeaveIfError(fs.Connect());
+			CleanupClosePushL(fs);
+			RFile f;
+			User::LeaveIfError(f.Create(fs,fn, EFileWrite));
+			f.Close();
+			CleanupStack::PopAndDestroy();
+
+						_LIT(msg,"Auto-Start Enabled");
+					    CAknConfirmationNote* informationNote = new (ELeave) CAknConfirmationNote(ETrue);
+					    informationNote->SetTimeout(CAknNoteDialog::EShortTimeout);
+					    CAknSettingItemList::EditItemL(aIndex, aCalledFromMenu);
+						(*SettingItemArray())[aIndex]->StoreL();
+					   	informationNote->ExecuteLD(msg);
+		}
+		else
+		{
+			EikFileUtils::DeleteFile(fn);
+
+			_LIT(msg,"Auto-Start Disabled");
+								    CAknConfirmationNote* informationNote = new (ELeave) CAknConfirmationNote(ETrue);
+								    informationNote->SetTimeout(CAknNoteDialog::EShortTimeout);
+								    CAknSettingItemList::EditItemL(aIndex, aCalledFromMenu);
+									(*SettingItemArray())[aIndex]->StoreL();
+								   	informationNote->ExecuteLD(msg);
+		}
+
+
+
 #endif
 
 

@@ -119,7 +119,13 @@ public: // from CAknAppUi
 
     TKeyResponse HandleKeyEventL(const TKeyEvent& aKeyEvent,TEventCode aType);
 
+    static TInt ExitTimerCallBack(TAny* that);
+
+
     TBool iAutoStarted;
+
+    CPeriodic* iExitTimer;
+    TTime iStartTime;
 
     };
 

@@ -194,6 +194,7 @@ void CIncallertSettingsView::DoActivateL(const TVwsViewId& /*aPrevViewId*/,
 
 TBool CIncallertSettingsView::AutoStartFilePresent()
 	{
+#ifndef EKA2
 		#ifdef __WINS__
   		_LIT(path,"D:\\Symbian\\Series60_1_2_CW\\epoc32\\release\\WINSCW\\UDEB\\Z\\SYSTEM\\RECOGS\\Iclrstrt.mdl");
   		#else
@@ -207,6 +208,13 @@ TBool CIncallertSettingsView::AutoStartFilePresent()
 	    #endif
 
 		return ConeUtils::FileExists(mdlFile);
+#else
+		_LIT(KNoASFileFlag,"noautostart.dat");
+		TFileName fn(KNoASFileFlag);
+		CIncallertAppUi::CompleteWithPrivatePathL(fn);
+
+		return !(ConeUtils::FileExists(fn)); //in 3rd, if we have this file then hide and exit app
+#endif
 	}
 
 void CIncallertSettingsView::SaveSettingsL()

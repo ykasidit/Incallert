@@ -134,13 +134,14 @@ void CIncallertAppUi::ConstructL()
 
 CIncallertAppUi::CIncallertAppUi()
     {
-
+	iStartTime.HomeTime();
     }
 
 CIncallertAppUi::~CIncallertAppUi()
     {
      delete iDecoratedTabGroup;
      delete iLineStatusHandler;
+     delete iExitTimer;
 
     }
 
@@ -159,20 +160,47 @@ CIncallertAppUi::~CIncallertAppUi()
  void CIncallertAppUi::HandleCommandL(TInt aCommand)
     {
 
-	    if(aCommand == EEikCmdExit)
-    	{
-	        Exit();
-	        return;
-	    }
-	    if(aCommand ==  EAknSoftkeyExit)
-	    {
-            _LIT(msg,"Deactivating...");
-        	CAknInformationNote* informationNote = new (ELeave) CAknInformationNote(ETrue);
-        	informationNote->SetTimeout(CAknNoteDialog::EShortTimeout);
-        	informationNote->ExecuteLD(msg);
-        	Exit();
-	        return;
-	   	}
+	 switch(aCommand)
+	 {
+	 case EAknSoftkeyExit:
+	 {
+	             _LIT(msg,"Deactivating...");
+	         	CAknInformationNote* informationNote = new (ELeave) CAknInformationNote(ETrue);
+	         	informationNote->SetTimeout(CAknNoteDialog::EShortTimeout);
+	         	informationNote->ExecuteLD(msg);
+	 }
+	 //flow through to next case
+	 case EEikCmdExit:
+	 {
+	    if(!iAutoStarted)
+			Exit();
+		else
+			{
+				TTime now;
+				now.HomeTime();
+				TTimeIntervalMicroSeconds diff = now.MicroSecondsFrom(iStartTime);
+
+				if(diff<=TTimeIntervalMicroSeconds(5))
+				{
+
+				//auto started apps must not exit sooner than 5 secs or phone might say our app has corrupted
+				iEikonEnv->RootWin().SetOrdinalPosition(-1,ECoeWinPriorityNeverAtFront);
+				if(!iExitTimer)//if not already started exit timer
+				{
+					iExitTimer = CPeriodic::NewL(0);
+					iExitTimer->Start( 5000000, 5000000, TCallBack(ExitTimerCallBack,this));
+				}
+
+				}
+				else
+					Exit(); //app was already started long enough
+			}
+
+	    return;
+	 }
+	 default:
+	 break;
+	 }
 
     if(CAknViewAppUi::iView == iAppView)
     {
@@ -267,6 +295,17 @@ TBool CIncallertAppUi::ProcessCommandParametersL(TApaCommand aCommand,TFileName&
 		task.SetWgId(CEikonEnv::Static()->RootWin().Identifier());
 		task.SendToBackground();
 
+		if(!CIncallertSettingsView::AutoStartFilePresent())
+		{
+			//if noautostart file exists then prepare exit
+			if(!iExitTimer)
+			{
+				iExitTimer = CPeriodic::NewL(0);
+				iEikonEnv->RootWin().SetOrdinalPosition(-1,ECoeWinPriorityNeverAtFront);
+				iExitTimer->Start( 5000000, 5000000, TCallBack(ExitTimerCallBack,this));
+			}
+		}
+
 	  }
 
 #ifdef EKA2
@@ -274,6 +313,13 @@ TBool CIncallertAppUi::ProcessCommandParametersL(TApaCommand aCommand,TFileName&
 #else
    return CEikAppUi::ProcessCommandParametersL( aCommand,aDocumentName );
 #endif
+}
+
+TInt CIncallertAppUi::ExitTimerCallBack(TAny* that)
+{
+	((CIncallertAppUi*)that)->iExitTimer->Cancel();
+	((CIncallertAppUi*)that)->Exit();
+	return 1;
 }
 
 void CIncallertAppUi::HandleWsEventL(const TWsEvent &aEvent, CCoeControl *aDestination)
