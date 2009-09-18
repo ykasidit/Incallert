@@ -24,23 +24,11 @@
 #include "Incallert.hrh"
 #include <aknnotewrappers.h>
 #include <commdb.h>
+#include "IncallertAppui.h"
 
 #define MILLION 1000000
 
-enum TMyCall
-	{
-	CallNone,
-	CallVoice,
-	CallFax,
-	CallData,
-	CallAlerting,
-	CallRinging,
-	CallAlternating,
-	//3 new consts
-	CallDialling,
-	CallAnswering,
-	CallDisconnecting
-	};
+
 
 CLineStatusHandler* CLineStatusHandler::NewL(CIncallertAppUi* ui)
 {
@@ -109,6 +97,21 @@ void CLineStatusHandler::ConstructL()
 		User::LeaveIfError(iPhone.GetLineInfo(0,iLineInfo));
 		User::LeaveIfError(iLine.Open(iPhone,iLineInfo.iName));
 
+		_LIT(KPreMinMid,"preminute.mid");
+		_LIT(KMinMid,"minute.mid");
+		TFileName fname;
+
+		fname = KPreMinMid;
+		CIncallertAppUi::CompleteWithPrivatePathL(fname);
+		//TRAPD(err,
+		iPreMinutePlayer = CMdaAudioPlayerUtility::NewFilePlayerL(fname,*this);
+			  //);
+
+		fname = KMinMid;
+		CIncallertAppUi::CompleteWithPrivatePathL(fname);
+		//TRAP(err,
+		iAtMinutePlayer = CMdaAudioPlayerUtility::NewFilePlayerL(fname,*this);
+			//  );
 
 }
 
@@ -132,6 +135,9 @@ CLineStatusHandler::~CLineStatusHandler()
 		delete iPeriodicCycle;
 		iPeriodicCycle = NULL;
 	}
+
+	delete iPreMinutePlayer;
+	delete iAtMinutePlayer;
 }
 
 
@@ -220,11 +226,15 @@ void CLineStatusHandler::ShowDurAndMsg(const TDesC& aStr, TNotifyType aType)
 		if(aType == EWarning)
 		{
 		CAknWarningNote* informationNote = new (ELeave) CAknWarningNote(ETrue);
+		if(iSoundInitOk)
+			informationNote->SetTone(informationNote->ENoTone); //play midi instead
 		informationNote->ExecuteLD(buf);
 		}
 		else
 		{
 		CAknInformationNote* informationNote = new (ELeave) CAknInformationNote(ETrue);
+		if(iSoundInitOk)
+			informationNote->SetTone(informationNote->ENoTone);
 		informationNote->ExecuteLD(buf);
 		}
 	}
@@ -232,6 +242,8 @@ void CLineStatusHandler::ShowDurAndMsg(const TDesC& aStr, TNotifyType aType)
 	{
 
 		CAknWarningNote* informationNote = new (ELeave) CAknWarningNote(ETrue);
+		if(iSoundInitOk)
+			informationNote->SetTone(informationNote->ENoTone);
 		informationNote->ExecuteLD(aStr);
 	}
 }
@@ -245,14 +257,16 @@ TInt CLineStatusHandler::RunError(TInt aError)
 TInt CLineStatusHandler::PeriodicPreCycleCallBack(TAny* that)
 {
 
-	if(((CLineStatusHandler*)that)->inCall)
+	CLineStatusHandler* the = (CLineStatusHandler*)that;
+
+	if(the->inCall)
 	{
 		RCall::TStatus status;
-		((CLineStatusHandler*)that)->iLine.GetStatus(status);
+		the->iLine.GetStatus(status);
 		if(status == RCall::EStatusConnected)
 			{
 
-			((CLineStatusHandler*)that)->inCall = ETrue;
+			the->inCall = ETrue;
 
 			///////////////////
 			TBool isvisible = EFalse;
@@ -264,8 +278,14 @@ TInt CLineStatusHandler::PeriodicPreCycleCallBack(TAny* that)
 			}
 			///////////////////
 
+			if(the->iSoundInitOk && the->iPreMinutePlayer)
+			{
+			the->iPreMinutePlayer->SetVolume((the->iPreMinutePlayer->MaxVolume())/6);
+			the->iPreMinutePlayer->Play();
+			}
+
 			_LIT(msg,"new minute coming...");
-			((CLineStatusHandler*)that)->ShowDurAndMsg(msg, EWarning);
+			the->ShowDurAndMsg(msg, EWarning);
 
 			///////////////////
 			if(!isvisible)
@@ -277,8 +297,8 @@ TInt CLineStatusHandler::PeriodicPreCycleCallBack(TAny* that)
 				return 1;
 			}
 	}
-		((CLineStatusHandler*)that)->iPeriodicPreCycle->Cancel();
-		((CLineStatusHandler*)that)->inCall = EFalse;
+		the->iPeriodicPreCycle->Cancel();
+		the->inCall = EFalse;
 
 		return 1;
 }
@@ -301,13 +321,15 @@ void CLineStatusHandler::EndPopUp()
 
 TInt CLineStatusHandler::PeriodicCycleCallBack(TAny* that)
 	{
-			if(((CLineStatusHandler*)that)->inCall)
+			CLineStatusHandler* the = (CLineStatusHandler*)that;
+
+			if(the->inCall)
 			{
 					RCall::TStatus status;
-					((CLineStatusHandler*)that)->iLine.GetStatus(status);
+					the->iLine.GetStatus(status);
 					if(status == RCall::EStatusConnected)
 					{
-						((CLineStatusHandler*)that)->inCall = ETrue;
+						the->inCall = ETrue;
 
 						///////////////////
 						TBool isvisible = EFalse;
@@ -320,8 +342,14 @@ TInt CLineStatusHandler::PeriodicCycleCallBack(TAny* that)
 						}
 						////////////////////////
 
+						if(the->iSoundInitOk && the->iAtMinutePlayer)
+						{
+						the->iAtMinutePlayer->SetVolume((the->iAtMinutePlayer->MaxVolume())/6);
+						the->iAtMinutePlayer->Play();
+						}
 						_LIT(msg,"New Minute");
-						((CLineStatusHandler*)that)->ShowDurAndMsg(msg, EInfo);
+						the->ShowDurAndMsg(msg, EInfo);
+
 
 						///////////////////
 						if(!isvisible)
@@ -334,8 +362,8 @@ TInt CLineStatusHandler::PeriodicCycleCallBack(TAny* that)
 					}
 			}
 
-		((CLineStatusHandler*)that)->iPeriodicCycle->Cancel();
-		((CLineStatusHandler*)that)->inCall = EFalse;
+		the->iPeriodicCycle->Cancel();
+		the->inCall = EFalse;
 
 		return 1;
 	}
@@ -349,3 +377,18 @@ void CLineStatusHandler::SetPrefs(TUint  preSeconds,
 		this->startMinute = startMin;
 
 	}
+
+void CLineStatusHandler::MapcInitComplete(TInt aError, const TTimeIntervalMicroSeconds& aDuration)
+{
+	if(aError == KErrNone)
+		iSoundInitOk = ETrue;
+	else
+	{
+		iSoundInitOk = EFalse;
+		TBuf<64> buf;
+		buf.Format(_L("MIDI sound open failed: %d"),aError);
+		ShowDurAndMsg(buf, EWarning);
+	}
+}
+void CLineStatusHandler::MapcPlayComplete(TInt aError)
+{}

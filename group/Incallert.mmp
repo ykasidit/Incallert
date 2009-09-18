@@ -72,9 +72,9 @@ LIBRARY		   avkon.lib
 LIBRARY		   commonengine.lib
 LIBRARY		   efsrv.lib
 LIBRARY		   estor.lib
-LIBRARY        aknnotify.lib bitgdi.lib
-LIBRARY        hlplch.lib bafl.lib fbscli.lib etel3rdparty.lib bluetooth.lib mgfetch.lib gdi.lib esock.lib connmon.lib btextnotifiers.lib egul.lib http.lib inetprotutil.lib aknskins.lib eikcoctl.lib eikctl.lib imageconversion.lib commdb.lib sendui.lib etext.lib apgrfx.lib sysutil.lib apmime.lib insock.lib ws32.lib commonui.lib etelmm.lib ezlib.lib etel.lib msgs.lib gsmu.lib smcm.lib
-
+LIBRARY		   commdb.lib
+LIBRARY        bafl.lib fbscli.lib egul.lib gdi.lib aknskins.lib eikcoctl.lib eikctl.lib etext.lib apgrfx.lib sysutil.lib ws32.lib etel.lib
+LIBRARY 	   mediaclientaudio.lib
 #ifdef EKA2
 LIBRARY   aknicon.lib
 #endif

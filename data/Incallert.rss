@@ -835,7 +835,7 @@ RESOURCE TBUF r_disclaimer_str
 
 RESOURCE TBUF r_appver_str
 {
-	buf = "\tIncallert 3.0";
+	buf = "\tIncallert 3.03";
 }
 
 RESOURCE TBUF r_fors60_str

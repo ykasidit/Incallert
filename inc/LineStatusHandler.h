@@ -23,10 +23,11 @@
 #include <aknappui.h>
 #include <aknglobalnote.h>
 #include <etel.h>
+#include <mdaaudiosampleplayer.h>
 
 class CIncallertAppUi;
 
-class CLineStatusHandler : CActive
+class CLineStatusHandler : CActive, public MMdaAudioPlayerCallback
 {
 
 	public:
@@ -92,8 +93,14 @@ class CLineStatusHandler : CActive
 
 	TTime iConnectedTime;
 
+	void MapcInitComplete(TInt aError, const TTimeIntervalMicroSeconds& aDuration);
+	void MapcPlayComplete(TInt aError);
+
 	private:
 	CLineStatusHandler();
+
+	CMdaAudioPlayerUtility *iAtMinutePlayer, *iPreMinutePlayer;
+	TBool iSoundInitOk;
 
 
 };
