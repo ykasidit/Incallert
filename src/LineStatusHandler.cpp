@@ -230,15 +230,13 @@ void CLineStatusHandler::ShowDurAndMsg(const TDesC& aStr, TNotifyType aType)
 		if(aType == EWarning)
 		{
 		CAknWarningNote* informationNote = new (ELeave) CAknWarningNote(ETrue);
-		if(iSoundInitOk)
-			informationNote->SetTone(informationNote->ENoTone); //play midi instead
+		informationNote->SetTone(informationNote->EWarningTone);
 		informationNote->ExecuteLD(buf);
 		}
 		else
 		{
 		CAknInformationNote* informationNote = new (ELeave) CAknInformationNote(ETrue);
-		if(iSoundInitOk)
-			informationNote->SetTone(informationNote->ENoTone);
+		informationNote->SetTone(informationNote->EConfirmationTone);
 		informationNote->ExecuteLD(buf);
 		}
 	}
@@ -246,8 +244,7 @@ void CLineStatusHandler::ShowDurAndMsg(const TDesC& aStr, TNotifyType aType)
 	{
 
 		CAknWarningNote* informationNote = new (ELeave) CAknWarningNote(ETrue);
-		if(iSoundInitOk)
-			informationNote->SetTone(informationNote->ENoTone);
+		informationNote->SetTone(informationNote->EWarningTone);
 		informationNote->ExecuteLD(aStr);
 	}
 }

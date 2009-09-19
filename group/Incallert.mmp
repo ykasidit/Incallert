@@ -23,7 +23,7 @@ TARGETTYPE		exe
 UID		  		0x100039CE 0xA000C40E
 VENDORID	  	0
 SECUREID		0xA000C40E
-CAPABILITY		ReadUserData WriteUserData NetworkServices LocalServices UserEnvironment
+CAPABILITY
 #else
 TARGET          Incallert.app
 TARGETTYPE      app
