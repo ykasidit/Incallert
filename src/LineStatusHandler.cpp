@@ -105,12 +105,16 @@ void CLineStatusHandler::ConstructL()
 		CIncallertAppUi::CompleteWithPrivatePathL(fname);
 		//TRAPD(err,
 		iPreMinutePlayer = CMdaAudioPlayerUtility::NewFilePlayerL(fname,*this);
+		iPreMinutePlayer->SetPriority(80,EMdaPriorityPreferenceTimeAndQuality);
+
 			  //);
 
 		fname = KMinMid;
 		CIncallertAppUi::CompleteWithPrivatePathL(fname);
 		//TRAP(err,
 		iAtMinutePlayer = CMdaAudioPlayerUtility::NewFilePlayerL(fname,*this);
+		iAtMinutePlayer->SetPriority(80,EMdaPriorityPreferenceTimeAndQuality);
+
 			//  );
 
 }

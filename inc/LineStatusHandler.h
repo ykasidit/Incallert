@@ -102,5 +102,7 @@ class CLineStatusHandler : CActive, public MMdaAudioPlayerCallback
 	CMdaAudioPlayerUtility *iAtMinutePlayer, *iPreMinutePlayer;
 	TBool iSoundInitOk;
 
+	public:
+		void PlaySoundTest(){iPreMinutePlayer->Play();};
 
 };

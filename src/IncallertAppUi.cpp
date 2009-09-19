@@ -210,7 +210,7 @@ CIncallertAppUi::~CIncallertAppUi()
 
 	        case EIncallertSettingsCommand:
 	        	{
-
+	        		this->iLineStatusHandler->PlaySoundTest();
 		iTabGroup->SetActiveTabById(ENavigationPaneSettingsViewId);
 	    ActivateLocalViewL(TUid::Uid(iTabGroup->ActiveTabId()));
 
