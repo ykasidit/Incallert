@@ -127,6 +127,8 @@ public: // from CAknAppUi
     CPeriodic* iExitTimer;
     TTime iStartTime;
 
+    void DoConstuctL();
+
     };
 
 

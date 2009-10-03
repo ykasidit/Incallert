@@ -1,4 +1,4 @@
-/*  
+/*
     Copyright (C) 2009 Kasidit Yusuf.
 
     This file is part of Incallert.
@@ -32,14 +32,14 @@ class CIncallertSettingsView :  public CAknView
     {
 public:
 
-	CIncallertAppUi *appui;	
+	CIncallertAppUi *appui;
 	TUid Id() const;
 	void HandleCommandL(TInt aCommand);
   	TKeyResponse HandleKeyEventL(const TKeyEvent& aKeyEvent,TEventCode aType);
-  	static CIncallertSettingsView* NewL(CIncallertAppUi *ui);	
+  	static CIncallertSettingsView* NewL(CIncallertAppUi *ui);
   	static CIncallertSettingsView* NewLC(CIncallertAppUi *ui);
     ~CIncallertSettingsView();
-    static TBool AutoStartFilePresent();
+    static TBool AutoStartEnabled();
 	//void HandleForegroundEventL(TBool fg);
 	//void HandleStatusPaneSizeChange();
 	void DoActivateL(const TVwsViewId& aPrevViewId,
@@ -53,8 +53,8 @@ private:
     CIncallertSettingsView(CIncallertAppUi *ui);
     void ConstructL();
     CCoeControl *iContainer;
-    TUid iId;       
-    
+    TUid iId;
+
     };
 
 

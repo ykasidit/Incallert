@@ -42,6 +42,10 @@
 void CIncallertAppUi::ConstructL()
     {
 
+	iEikonEnv->RootWin().SetOrdinalPosition(-1,ECoeWinPriorityNeverAtFront); //hide first - wait for processcmd call
+	TApaTask task(iEikonEnv->WsSession( ));
+					 task.SetWgId(CEikonEnv::Static()->RootWin().Identifier());
+					 task.SendToBackground();
 #ifdef EKA2
   BaseConstructL(EAknEnableSkin);
 #else
@@ -49,85 +53,6 @@ void CIncallertAppUi::ConstructL()
   BaseConstructL(0x08 | 0x1000);
 #endif
 
-
-    iAppView = CIncallertAppView::NewL(this);
-    iSettingsView = CIncallertSettingsView::NewL(this);
-    iLineStatusHandler = CLineStatusHandler::NewL(this);
-
-    iHelpAppView = CHelpAppView::NewL( ENavigationPaneHelpViewId);
-    iAboutAppView = CAboutAppView::NewL( ENavigationPaneAboutViewId);
-
-	_LIT(KIni,"Incallert.ini");
-    TFileName fname(KIni);
-	#ifndef __WINS__
-    CompleteWithPrivatePathL(fname);
-	#endif
-    TSettingsListSettings settings;
-
-    TRAPD(err,
-    RFs fs = iCoeEnv->FsSession();
-
-    User::LeaveIfError(fs.Connect());
-    CleanupClosePushL(fs);
-    RFileReadStream rfrs;
-    if(rfrs.Open(fs,fname,EFileRead) == KErrNone)
-    {
-	    CleanupClosePushL(rfrs);
-    	settings.InternalizeL(rfrs);
-    	CleanupStack::PopAndDestroy();
-   	}
-	CleanupStack::PopAndDestroy();
-	);
-
-    iLineStatusHandler->SetPrefs(settings.iPreCycleTime,settings.iCycleTime,settings.iStartMinute);
-
-
-    AddViewL(iAboutAppView);
-    AddViewL(iSettingsView); // transfer ownership to base class
-    AddViewL(iHelpAppView);
-    AddViewL(iAppView);    // transfer ownership to base class
-
-
-
-
-
-
-
- 	CEikStatusPane* sp = StatusPane();
-    iNaviPane = (CAknNavigationControlContainer *)sp->ControlL(TUid::Uid(EEikStatusPaneUidNavi));
-    sp->SetDimmed(ETrue);
-
-	iDecoratedTabGroup = iNaviPane->ResourceDecorator();
-
-    if (iDecoratedTabGroup)
-        {
-        iTabGroup = (CAknTabGroup*) iDecoratedTabGroup->DecoratedControl();
-        }
-
-    if (iTabGroup)
-        {
-    	//iTabGroup->SetActiveTabById(ENavigationPaneStatusViewId);
-    	//ActivateViewL(TVwsViewId(KUidIncallertApp,TUid::Uid(iTabGroup->ActiveTabId())));
-        }
-
-
-
-	    SetDefaultViewL(*iAppView);
-	    _LIT(msg,"Activating...");
-	    CAknInformationNote* activateInformationNote = new (ELeave) CAknInformationNote(ETrue);
-		activateInformationNote->SetTimeout(CAknNoteDialog::EShortTimeout);
-		activateInformationNote->ExecuteLD(msg);
-
-		TInt ret = iLineStatusHandler->Start();
-		if(ret!=KErrNone)
-	    	{
-
-			    _LIT(msg,"Incallert's call monitor failed to start");
-			    CAknErrorNote* informationNote = new (ELeave) CAknErrorNote(ETrue);
-			    //informationNote->SetTimeout(CAknNoteDialog::EShortTimeout);
-			   	informationNote->ExecuteLD(msg);
-	        	Exit();
-	    	}
 
 
     }
@@ -163,12 +88,6 @@ CIncallertAppUi::~CIncallertAppUi()
 	 switch(aCommand)
 	 {
 	 case EAknSoftkeyExit:
-	 {
-	             _LIT(msg,"Deactivating...");
-	         	CAknInformationNote* informationNote = new (ELeave) CAknInformationNote(ETrue);
-	         	informationNote->SetTimeout(CAknNoteDialog::EShortTimeout);
-	         	informationNote->ExecuteLD(msg);
-	 }
 	 //flow through to next case
 	 case EEikCmdExit:
 	 {
@@ -270,7 +189,6 @@ TBool CIncallertAppUi::ProcessCommandParametersL( CApaCommandLine &aCommandLine 
 TBool CIncallertAppUi::ProcessCommandParametersL(TApaCommand aCommand,TFileName& aDocumentName)
 #endif
 {
-
 	#ifdef EKA2
 		if(aCommandLine.OpaqueData().Length() > 0)
 	#else
@@ -280,32 +198,42 @@ TBool CIncallertAppUi::ProcessCommandParametersL(TApaCommand aCommand,TFileName&
 	      // Opaque data exists, app. has been manually started from the menu
 	  	iAutoStarted = EFalse;
 	  	iEikonEnv->RootWin().SetOrdinalPosition(-1,ECoeWinPriorityNormal);
-
-		TApaTask task(iEikonEnv->WsSession( ));
+	  	TApaTask task(iEikonEnv->WsSession( ));
 		task.SetWgId(CEikonEnv::Static()->RootWin().Identifier());
 		task.BringToForeground();
+		DoConstuctL();
 	  }
 	  else
 	  {
 		iAutoStarted = ETrue;
+		if(!CIncallertSettingsView::AutoStartEnabled())
+				{
+					//prepare exit
+					if(!iExitTimer)
+					{
+						iExitTimer = CPeriodic::NewL(0);
+						iEikonEnv->RootWin().SetOrdinalPosition(-1,ECoeWinPriorityNeverAtFront);
+						iExitTimer->Start( 5000000, 5000000, TCallBack(ExitTimerCallBack,this));
+					}
 
+#ifdef EKA2
+   return CEikAppUi::ProcessCommandParametersL( aCommandLine );
+#else
+   return CEikAppUi::ProcessCommandParametersL( aCommand,aDocumentName );
+#endif
+				}
+
+		////////autostart enabled:
 		iEikonEnv->RootWin().SetOrdinalPosition(-1,ECoeWinPriorityNormal);
+		DoConstuctL();
 
-		TApaTask task(iEikonEnv->WsSession( ));
-		task.SetWgId(CEikonEnv::Static()->RootWin().Identifier());
-		task.SendToBackground();
 
-		if(!CIncallertSettingsView::AutoStartFilePresent())
 		{
-			//if noautostart file exists then prepare exit
-			if(!iExitTimer)
-			{
-				iExitTimer = CPeriodic::NewL(0);
-				iEikonEnv->RootWin().SetOrdinalPosition(-1,ECoeWinPriorityNeverAtFront);
-				iExitTimer->Start( 5000000, 5000000, TCallBack(ExitTimerCallBack,this));
-			}
+		TApaTask task(iEikonEnv->WsSession( ));
+							task.SetWgId(CEikonEnv::Static()->RootWin().Identifier());
+							task.SendToBackground();
 		}
-
+		////////////////
 	  }
 
 #ifdef EKA2
@@ -313,7 +241,86 @@ TBool CIncallertAppUi::ProcessCommandParametersL(TApaCommand aCommand,TFileName&
 #else
    return CEikAppUi::ProcessCommandParametersL( aCommand,aDocumentName );
 #endif
+
 }
+
+void CIncallertAppUi::DoConstuctL()
+{
+	//at first start iAppView would be null as all member ptrs are NULL (defaulted by (ELeave) in CIncallertDocument::CreateAppUiL())
+	if(iAppView)//if already called before - just to make sure there's no duplicate ctor alloc
+		return;
+
+	 iAppView = CIncallertAppView::NewL(this);
+	    iSettingsView = CIncallertSettingsView::NewL(this);
+	    iLineStatusHandler = CLineStatusHandler::NewL(this);
+
+	    iHelpAppView = CHelpAppView::NewL( ENavigationPaneHelpViewId);
+	    iAboutAppView = CAboutAppView::NewL( ENavigationPaneAboutViewId);
+
+		_LIT(KIni,"Incallert.ini");
+	    TFileName fname(KIni);
+		#ifndef __WINS__
+	    CompleteWithPrivatePathL(fname);
+		#endif
+	    TSettingsListSettings settings;
+
+	    TRAPD(err,
+	    RFs fs = iCoeEnv->FsSession();
+
+	    User::LeaveIfError(fs.Connect());
+	    CleanupClosePushL(fs);
+	    RFileReadStream rfrs;
+	    if(rfrs.Open(fs,fname,EFileRead) == KErrNone)
+	    {
+		    CleanupClosePushL(rfrs);
+	    	settings.InternalizeL(rfrs);
+	    	CleanupStack::PopAndDestroy();
+	   	}
+		CleanupStack::PopAndDestroy();
+		);
+
+	    iLineStatusHandler->SetPrefs(settings.iPreCycleTime,settings.iCycleTime,settings.iStartMinute);
+
+
+	    AddViewL(iAboutAppView);
+	    AddViewL(iSettingsView); // transfer ownership to base class
+	    AddViewL(iHelpAppView);
+	    AddViewL(iAppView);    // transfer ownership to base class
+
+	 	CEikStatusPane* sp = StatusPane();
+	    iNaviPane = (CAknNavigationControlContainer *)sp->ControlL(TUid::Uid(EEikStatusPaneUidNavi));
+	    sp->SetDimmed(ETrue);
+
+		iDecoratedTabGroup = iNaviPane->ResourceDecorator();
+
+	    if (iDecoratedTabGroup)
+	        {
+	        iTabGroup = (CAknTabGroup*) iDecoratedTabGroup->DecoratedControl();
+	        }
+
+	    if (iTabGroup)
+	        {
+	    	//iTabGroup->SetActiveTabById(ENavigationPaneStatusViewId);
+	    	//ActivateViewL(TVwsViewId(KUidIncallertApp,TUid::Uid(iTabGroup->ActiveTabId())));
+	        }
+
+		    SetDefaultViewL(*iAppView);
+
+			TInt ret = iLineStatusHandler->Start();
+			if(ret!=KErrNone)
+		    	{
+
+				    _LIT(msg,"Incallert's call monitor failed to start");
+				    CAknErrorNote* informationNote = new (ELeave) CAknErrorNote(ETrue);
+				    //informationNote->SetTimeout(CAknNoteDialog::EShortTimeout);
+				   	informationNote->ExecuteLD(msg);
+		        	Exit();
+		    	}
+
+}
+
+
+
 
 TInt CIncallertAppUi::ExitTimerCallBack(TAny* that)
 {

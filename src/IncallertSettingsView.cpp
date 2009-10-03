@@ -192,7 +192,7 @@ void CIncallertSettingsView::DoActivateL(const TVwsViewId& /*aPrevViewId*/,
 
     }
 
-TBool CIncallertSettingsView::AutoStartFilePresent()
+TBool CIncallertSettingsView::AutoStartEnabled()
 	{
 #ifndef EKA2
 		#ifdef __WINS__
