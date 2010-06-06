@@ -66,19 +66,20 @@ void CIncallertContainer::Draw(const TRect&) const
     TRect aRect = Rect();
     gc.Clear(aRect);
 
-	aRect.Width();
-    TPoint p;
-    TSize picsz = iBitmap->SizeInPixels();
-
-    p.iX = aRect.Width() - picsz.iWidth;
-    p.iX/=2;
-
-    p.iY = aRect.Height() - picsz.iHeight;
-    p.iY/=2;
-
     if(iBitmap)
     {
-		gc.BitBlt(p,iBitmap);
+
+		aRect.Width();
+		TPoint p;
+		TSize picsz = iBitmap->SizeInPixels();
+
+		p.iX = aRect.Width() - picsz.iWidth;
+		p.iX/=2;
+
+		p.iY = aRect.Height() - picsz.iHeight;
+		p.iY/=2;
+
+    	gc.BitBlt(p,iBitmap);
     }
 
     }

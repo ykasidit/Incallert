@@ -2,7 +2,7 @@ About
 -----------
 Incallert software makes in-call "minute beeps" for S60 2nd and 3rd Ed phones.
 
-The original version was developed and deployed at http://www.clearevo.com/incallert
+The original version was developed and deployed at <http://www.clearevo.com/incallert>
 (As this project is free-software so the source-code is freely available to other developers, so you might be using improved/altered versions of this software.)
 
 Installing
@@ -16,9 +16,9 @@ Compiling
 This project is a general Symbian C++ project so you can probably compile it as any other Symbian C++ project, you might need to change the pkg file for the direct path to each component.
 
 This project is developed/built using gnupoc and eclipse ide in Ubuntu GNU/Linux - for full details on how to set up the compiling/development environment, please visit:
-http://www.clearevo.com/blog/2009/06/05/symbian_c_on_linux_using_gnupoc_and_eclipse_cdt.html
+<http://www.clearevo.com/blog/programming/2009/06/05/symbian_c%2B%2B_on_linux_using_gnupoc_and_eclipse_cdt.html>
 
-You will also need to make your own sis folder and your own version of the pkg file: for how and why please refer to http://wiki.github.com/ykasidit/Incallert/compiling
+You will also need to make your own sis folder and your own version of the pkg file: for how and why please refer to <http://wiki.github.com/ykasidit/Incallert/compiling>
 
 
 License
